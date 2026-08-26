@@ -8,3 +8,22 @@ This repository contains Python training exercises, assignments, and curriculum 
 ## Repository Contents
 * **`Day_01` to `Day_11`**: Daily training exercises, class workspaces, and assignment templates under `Day_XX/assignment/`.
 * **[`training_plan.md`](file:///c:/Users/conne/Downloads/CDAC_Python_Vinodco/training_plan.md)**: Details of the day-by-day training curriculum.
+
+## Real Contributor
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/Abs6187">
+        <img src="https://avatars.githubusercontent.com/u/129143621?v=4" width="100px;" alt="Abhay Gupta"/><br />
+        <sub><b>Abhay Gupta (Abs6187)</b></sub>
+      </a>
+    </td>
+    <td>
+      <b>Bio:</b> Computer Science student | Passionate about AI, software dev, & gaming | Building solutions for urban sustainability and many more | Let's connect<br/>
+      <b>Company:</b> @reliance<br/>
+      <b>Location:</b> Jabalpur, Madhya Pradesh, India<br/>
+      <b>Website:</b> <a href="https://www.abhaygupta6187.me/">abhaygupta6187.me</a>
+    </td>
+  </tr>
+</table>
