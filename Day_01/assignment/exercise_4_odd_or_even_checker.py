@@ -7,8 +7,16 @@ Write a program that prompts the user for an integer and prints whether it is ev
 """
 
 def solve():
-    # TODO: Implement your solution here
-    pass
+    num = int(input("Enter value: "))
+
+    if num < 0:
+        print("Enter a positive value")
+        return
+
+    if num % 2 == 0:
+        print(f'{num} is an even number')
+    else:
+        print(f'{num} is an odd number')
 
 if __name__ == "__main__":
     solve()

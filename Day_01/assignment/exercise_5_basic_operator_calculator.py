@@ -7,8 +7,20 @@ Create a program that takes two numbers and a math operator (`+`, `-`, `*`, `/`)
 """
 
 def solve():
-    # TODO: Implement your solution here
-    pass
+    num1 = int(input("Enter the first number: "))
+    num2 = int(input("Enter the second number: "))
+    choice = int(input("Choose 1,2,3,4 for operations (`+`, `-`, `*`, `/`) respectively: "))
+
+    if choice == 1:
+        print(num1 + num2)
+    elif choice == 2:
+        print(num1 - num2)
+    elif choice == 3:
+        print(num1 * num2)
+    elif choice == 4:
+        print(num1 / num2 )
+    else: 
+        print("Invalid Choice")
 
 if __name__ == "__main__":
     solve()

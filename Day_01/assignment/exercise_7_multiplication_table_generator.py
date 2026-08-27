@@ -13,8 +13,10 @@ Write a program that takes an integer from the user and prints its multiplicatio
 """
 
 def solve():
-    # TODO: Implement your solution here
-    pass
+    a = int(input("Enter a value: "))
+
+    for i in range(1, 11):
+        print(f'{a} x {i} = ', a*i)
 
 if __name__ == "__main__":
     solve()

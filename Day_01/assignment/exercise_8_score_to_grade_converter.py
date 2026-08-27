@@ -10,8 +10,25 @@ Write a script that takes a numeric test score from the user (0 to 100) and disp
 """
 
 def solve():
-    # TODO: Implement your solution here
-    pass
+    num = int(input("Please enter your score: "))
+    gpa = {
+
+        10: 'A',
+        9: 'A',
+        8: 'B',
+        7: 'C',
+        6: 'D'
+
+    }
+
+    if num >= 60:
+        print(gpa.get(num//10))
+    else:
+        print("F")
+
+
+
+
 
 if __name__ == "__main__":
     solve()

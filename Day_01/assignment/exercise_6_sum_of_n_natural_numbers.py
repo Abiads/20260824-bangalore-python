@@ -8,8 +8,12 @@ Write a script that accepts a positive integer $N$ from the user and calculates 
 """
 
 def solve():
-    # TODO: Implement your solution here
-    pass
+    num = int(input("Enter a number: "))
+
+    n = num*(num + 1)
+    a = n/2
+
+    print(int(a))
 
 if __name__ == "__main__":
     solve()
