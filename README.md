@@ -21,9 +21,21 @@ This repository contains Python training exercises, assignments, and curriculum 
     </td>
     <td>
       <b>Bio:</b> Computer Science student | Passionate about AI, software dev, & gaming | Building solution and more | Visit my Linktree Profile for more<br/>
-      
       <b>Home Town Location:</b> Jabalpur, Madhya Pradesh, India<br/>
       <b>Website:</b> <a href="https://www.abhaygupta6187.me/">abhaygupta6187.me</a>
     </td>
   </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/dv404">
+        <img src="https://avatars.githubusercontent.com/u/171235758?v=4" width="100px;" alt="Dv"/><br />
+        <sub><b>Dv (dv404)</b></sub>
+      </a>
+    </td>
+    <td>
+      <b>GitHub Profile:</b> <a href="https://github.com/dv404">@dv404</a><br/>
+      <b>Email:</b> rahul.bantupalli@yahoo.com
+    </td>
+  </tr>
 </table>
+
