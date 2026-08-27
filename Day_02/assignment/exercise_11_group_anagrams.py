@@ -5,10 +5,29 @@ Write a program that starts with a list of strings defined at the top of your sc
 
 - **Hardcoded Input**: `words = ["eat", "tea", "tan", "ate", "nat", "bat"]`
 - **Sample Output**: `[['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']]`
+
+--------------------------------------------------
+
+💡 Useful Functions & Methods:
+1. `sorted(iterable)` -> Sorts characters in a word.
+   - Example: `sorted("eat")` -> `['a', 'e', 't']`
+2. `''.join(sorted(word))` -> Creates a canonical sorted key for anagrams.
+   - Example: `''.join(sorted("tea"))` -> `"aet"`
+3. Dictionary grouping / `collections.defaultdict(list)`:
+   - Store words under their sorted key: `groups[key].append(word)`
+4. `list(groups.values())` -> Extracts list of grouped lists.
+
+📋 Step-by-Step Logic:
+1. Initialize an empty dictionary `anagram_groups = {}`.
+2. Iterate through each word in `words`:
+   a. Compute key `key = "".join(sorted(word))`.
+   b. If `key` not in `anagram_groups`, add `anagram_groups[key] = []`.
+   c. Append `word` to `anagram_groups[key]`.
+3. Convert `anagram_groups.values()` into a list and print.
 """
 
 def solve():
-    # TODO: Implement your solution here
+    # TODO: Implement your solution following the hints above
     pass
 
 if __name__ == "__main__":

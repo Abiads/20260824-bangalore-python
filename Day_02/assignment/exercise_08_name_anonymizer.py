@@ -8,13 +8,27 @@ Write a program that prompts the user to enter a full name (first name, middle n
 - **Sample Input**: `"Bangalore"`
 - **Sample Output**: `"Bangalore"`
 
----
+--------------------------------------------------
 
-## Part C: Difficult Complexity (2 Exercises)
+💡 Useful Functions & Methods:
+1. `str.split()` -> Splits the full name into a list of name parts.
+   - Example: `"Vinod Kumar Kayartaya".split()` -> `['Vinod', 'Kumar', 'Kayartaya']`
+2. List Slicing:
+   - `parts[:-1]` -> All elements except the last one (first and middle names).
+   - `parts[-1]` -> The last name.
+3. String Indexing & Formatting:
+   - `part[0].upper() + "."` -> Converts name part to initial.
+   - `' '.join(...)` -> Joins the formatted parts with spaces.
+
+📋 Step-by-Step Logic:
+1. `parts = name.split()`
+2. If `len(parts) <= 1`, print the name as-is.
+3. If `len(parts) > 1`, convert each part in `parts[:-1]` into initial `f"{p[0].upper()}."`.
+4. Append full `parts[-1]` and join with spaces.
 """
 
 def solve():
-    # TODO: Implement your solution here
+    # TODO: Implement your solution following the hints above
     pass
 
 if __name__ == "__main__":

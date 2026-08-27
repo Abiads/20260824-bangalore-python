@@ -8,13 +8,24 @@ Write a program that prompts the user to enter an email address string. Extract 
 - **Sample Input**: `"vinod.co"`
 - **Sample Output**: `"Invalid Email"`
 
----
+--------------------------------------------------
 
-## Part B: Medium Complexity (5 Exercises)
+💡 Useful Functions & Methods:
+1. `str.count(sub)` -> Counts how many times substring `sub` appears in the string.
+   - Example: `"user@domain.com".count("@")` -> `1`
+2. `str.split(sep, maxsplit)` -> Splits the string by delimiter `@`.
+   - Example: `"user@domain.com".split("@")` -> `['user', 'domain.com']`
+   - Access domain with index `[1]`.
+3. Alternative (Slicing): `str.find(sub)` -> Finds the index of `@`, then slice `email[index+1:]`.
+
+📋 Step-by-Step Logic:
+1. Check if `email.count("@") == 1`.
+2. If true, extract domain using `email.split("@")[1]` and print it.
+3. If false, print `"Invalid Email"`.
 """
 
 def solve():
-    # TODO: Implement your solution here
+    # TODO: Implement your solution following the hints above
     pass
 
 if __name__ == "__main__":
