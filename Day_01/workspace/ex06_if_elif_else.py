@@ -12,6 +12,7 @@ def main():
         return
     
     if month == 2:
+        # max_days = (year % 400 == 0 or year % 4 == 0 and year % 100 != 0) ? 29 :28
         max_days = 29 if year % 400 == 0 or year % 4 == 0 and year % 100 != 0 else 28
     elif month in (4, 6, 9, 11):
         max_days = 30
