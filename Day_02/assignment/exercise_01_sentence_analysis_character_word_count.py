@@ -31,8 +31,15 @@ Write a Python program that prompts the user to enter a sentence. The program mu
 """
 
 def solve():
-   ...
-   ...
+
+   s = input("Enter a sentence: ")
+
+   char = len(s)
+   words = s.split()
+
+   print("```text")
+   print(f'Total Character: {char} \nTotal Words: {len(words)}')
+   print("```")
 
 if __name__ == "__main__":
     solve()
