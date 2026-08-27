@@ -8,8 +8,22 @@ Write a Python script to print the first $N$ terms of the Fibonacci sequence, wh
 """
 
 def solve():
-    # TODO: Implement your solution here
-    pass
+    n = int(input("Enter the number: "))
+    a,b=0,1
+    for i in range(n):
+        print(a)
+        a = b
+        b = a+b
+        
+    
+        
+
+
+
+
+
+
+    
 
 if __name__ == "__main__":
     solve()
