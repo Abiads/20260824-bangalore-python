@@ -11,19 +11,11 @@ def solve():
     n = int(input("Enter the number: "))
     a,b=0,1
     for i in range(n):
-        print(a)
-        a = b
-        b = a+b
+        print(a, end = ", " if i < n-1 else " ")
         
-    
-        
-
-
-
-
-
-
-    
+        temp = b
+        b = a + b
+        a = temp 
 
 if __name__ == "__main__":
     solve()
