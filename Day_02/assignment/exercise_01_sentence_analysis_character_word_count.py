@@ -32,6 +32,7 @@ Write a Python program that prompts the user to enter a sentence. The program mu
 
 def solve():
    ...
+   ...
 
 if __name__ == "__main__":
     solve()

@@ -25,8 +25,7 @@ Write a program that prompts the user to enter an email address string. Extract 
 """
 
 def solve():
-    # TODO: Implement your solution following the hints above
-    pass
+    ...
 
 if __name__ == "__main__":
     solve()

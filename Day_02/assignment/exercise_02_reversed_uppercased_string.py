@@ -23,8 +23,7 @@ Write a program that takes a string input from the user, reverses the string, co
 """
 
 def solve():
-    # TODO: Implement your solution following the hints above
-    pass
+    ...
 
 if __name__ == "__main__":
     solve()
