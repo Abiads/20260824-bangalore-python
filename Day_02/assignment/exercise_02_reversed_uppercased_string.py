@@ -23,13 +23,10 @@ Write a program that takes a string input from the user, reverses the string, co
 """
 
 def solve():
-    
-
-   inp = input("Enter the string: ")
-   inp = inp[::-1]
-
-   print(inp.upper())
-
+    inp = input("Enter a string: ")
+    reversed_string = inp[::-1]
+    result = reversed_string.upper()
+    print(result)
 
 if __name__ == "__main__":
     solve()

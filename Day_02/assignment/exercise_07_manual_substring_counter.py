@@ -24,8 +24,18 @@ Write a program that prompts the user to enter a main text string and a substrin
 """
 
 def solve():
-    # TODO: Implement your solution following the hints above
-    pass
+    main_str = input("Enter the main text: ")
+    sub_str = input("Enter the substring: ")
+    
+    count = 0
+    if len(sub_str) == 0 or len(sub_str) > len(main_str):
+        count = 0
+    else:
+        for i in range(len(main_str) - len(sub_str) + 1):
+            if main_str[i:i + len(sub_str)] == sub_str:
+                count += 1
+    
+    print(count)
 
 if __name__ == "__main__":
     solve()

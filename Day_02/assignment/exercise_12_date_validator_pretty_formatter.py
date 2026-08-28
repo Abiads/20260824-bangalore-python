@@ -44,8 +44,45 @@ Your program must:
 """
 
 def solve():
-    # TODO: Implement your solution following the hints above
-    pass
+    date_str = input("Enter a date (DD/MM/YYYY): ")
+    
+    MONTH_NAMES = ("January", "February", "March", "April", "May", "June", 
+                   "July", "August", "September", "October", "November", "December")
+    
+    parts = date_str.split('/')
+    
+    if len(parts) != 3:
+        print("Invalid Date")
+        return
+    
+    try:
+        day = int(parts[0])
+        month = int(parts[1])
+        year = int(parts[2])
+    except ValueError:
+        print("Invalid Date")
+        return
+    
+    # Check month range
+    if month < 1 or month > 12:
+        print("Invalid Date")
+        return
+    
+    # Check leap year
+    is_leap = (year % 4 == 0 and year % 100 != 0) or (year % 400 == 0)
+    
+    # Days per month
+    days_in_month = (31, 29 if is_leap else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+    max_day = days_in_month[month - 1]
+    
+    # Check day range
+    if day < 1 or day > max_day:
+        print("Invalid Date")
+        return
+    
+    # Valid date - format and print
+    month_name = MONTH_NAMES[month - 1]
+    print(f"{month_name} {day}, {year}")
 
 if __name__ == "__main__":
     solve()

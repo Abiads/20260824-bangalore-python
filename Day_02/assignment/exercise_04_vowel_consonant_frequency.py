@@ -36,40 +36,47 @@ Write a program that prompts the user to enter a string and counts:
 """
 
 def solve():
-  str1=str(input("Enter a string: "))
-
-  lower1=str1.lower()
-  n=len(lower1)
-  print(n)
-  
-  
-  acount=0
-  ecount=0
-  icount=0
-  ocount=0
-  ucount=0
-  for i in range (n):
+    text = input("Enter a string: ")
+    text_lower = text.lower()
     
-    if 'a' in lower1[i]:
-      acount+=1
-    if 'e' in lower1[i]:
-      ecount+=1
-    if 'i' in lower1[i]:
-      icount+=1
-    if 'o' in lower1[i]:
-      ocount+=1
-    if 'u' in lower1[i]:
-      ucount+=1
-                           
+    vowels = 'aeiou'
+    vowel_freq = {}
+    consonant_count = 0
     
+    # Count vowel frequencies
+    for vowel in vowels:
+        vowel_freq[vowel] = text_lower.count(vowel)
+    
+    # Count consonants
+    for char in text_lower:
+        if char.isalpha() and char not in vowels:
+            consonant_count += 1
+    
+    print("Vowel Frequencies:")
+    for vowel in vowels:
+        print(f"{vowel}: {vowel_freq[vowel]}")
+    print(f"Total Consonants: {consonant_count}")
 
-  print("a:",acount)
-  print("e:",ecount)
-  print("i:",icount)
-  print("o",ocount)
-  print("u:",ucount)
-  vowelcount=  acount+ecount+icount+ocount+ucount
-  print("TotalConsonant",n-vowelcount)     
+        if lower1[i] == 'a':
+            acount += 1
+        if lower1[i] == 'e':
+            ecount += 1
+        if lower1[i] == 'i':
+            icount += 1
+        if lower1[i] == 'o':
+            ocount += 1
+        if lower1[i] == 'u':
+            ucount += 1
+
+    print("a:", acount)
+    print("e:", ecount)
+    print("i:", icount)
+    print("o:", ocount)
+    print("u:", ucount)
+
+    vowelcount = acount + ecount + icount + ocount + ucount
+    print("TotalConsonant:", n - vowelcount)
+
 
 
 if __name__ == "__main__":

@@ -31,15 +31,11 @@ Write a Python program that prompts the user to enter a sentence. The program mu
 """
 
 def solve():
-
-   s = input("Enter a sentence: ")
-
-   char = len(s)
-   words = s.split()
-
-   print("```text")
-   print(f'Total Character: {char} \nTotal Words: {len(words)}')
-   print("```")
+    s = input("Enter a sentence: ")
+    char_count = len(s)
+    word_count = len(s.split())
+    print(f"Total Characters: {char_count}")
+    print(f"Total Words: {word_count}")
 
 if __name__ == "__main__":
     solve()

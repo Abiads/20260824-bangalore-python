@@ -26,8 +26,29 @@ Write a program that prompts the user to enter a text string and compresses it u
 """
 
 def solve():
-    # TODO: Implement your solution following the hints above
-    pass
+    text = input("Enter a text string: ")
+    
+    if len(text) == 0:
+        print(text)
+        return
+    
+    compressed = []
+    count = 1
+    
+    for i in range(1, len(text)):
+        if text[i] == text[i - 1]:
+            count += 1
+        else:
+            compressed.append(f"{text[i - 1]}{count}")
+            count = 1
+    
+    compressed.append(f"{text[-1]}{count}")
+    compressed_str = ''.join(compressed)
+    
+    if len(compressed_str) < len(text):
+        print(compressed_str)
+    else:
+        print(text)
 
 if __name__ == "__main__":
     solve()

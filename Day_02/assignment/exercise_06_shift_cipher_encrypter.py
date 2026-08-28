@@ -27,8 +27,19 @@ Write a program that prompts the user for a text string and a shift integer, and
 """
 
 def solve():
-    # TODO: Implement your solution following the hints above
-    pass
+    text = input("Enter a string: ")
+    shift = int(input("Enter shift value: "))
+    
+    encrypted = ""
+    for char in text:
+        if char.isupper():
+            encrypted += chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
+        elif char.islower():
+            encrypted += chr((ord(char) - ord('a') + shift) % 26 + ord('a'))
+        else:
+            encrypted += char
+    
+    print(encrypted)
 
 if __name__ == "__main__":
     solve()

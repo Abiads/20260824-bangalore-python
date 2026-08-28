@@ -29,8 +29,19 @@ Write a program that prompts the user to enter a text string and finds the longe
 """
 
 def solve():
-    # TODO: Implement your solution following the hints above
-    pass
+    text = input("Enter a text string: ")
+    longest_palindrome = ""
+    
+    for i in range(len(text)):
+        for j in range(i + 1, len(text) + 1):
+            substring = text[i:j]
+            if substring == substring[::-1] and len(substring) > len(longest_palindrome):
+                longest_palindrome = substring
+    
+    if longest_palindrome:
+        print(longest_palindrome)
+    else:
+        print("")
 
 if __name__ == "__main__":
     solve()

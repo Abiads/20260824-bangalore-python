@@ -28,8 +28,18 @@ Write a program that prompts the user to enter a full name (first name, middle n
 """
 
 def solve():
-    # TODO: Implement your solution following the hints above
-    pass
+    name = input("Enter a full name: ")
+    parts = name.split()
+    
+    if len(parts) <= 1:
+        print(name)
+    else:
+        initials = []
+        for part in parts[:-1]:
+            initials.append(f"{part[0].upper()}.")
+        initials.append(parts[-1])
+        result = " ".join(initials)
+        print(result)
 
 if __name__ == "__main__":
     solve()
