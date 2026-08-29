@@ -153,3 +153,4 @@ Write a program that prompts the user to enter $N$ (number of soldiers) and $K$ 
   . . . . .
   Yum! The snake ate the food!
   ```
+
