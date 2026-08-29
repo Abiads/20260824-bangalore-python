@@ -17,3 +17,10 @@ Expected output: [[12, 5], [15, 9]]
 # TODO: Create list comprehension to filter coordinates
 # TODO: Condition: x > 0 and y > 0
 # TODO: Print valid coordinates
+def main():
+
+
+    pass
+
+if __name__== __main__:
+    main()

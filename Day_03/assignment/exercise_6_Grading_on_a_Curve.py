@@ -24,3 +24,10 @@ Example: [45, 88, 30, 98, 50] → [55, 93, 40, 100, 55]
 # TODO: Convert to list of integers
 # TODO: Create list comprehension with curve logic
 # TODO: Print original and curved scores
+def main():
+
+
+    pass
+
+if __name__== __main__:
+    main()

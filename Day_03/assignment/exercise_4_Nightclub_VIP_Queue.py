@@ -25,3 +25,10 @@ HINTS:
 # TODO: If on list, remove and insert at front
 # TODO: If not on list, print access denied
 # TODO: Print updated queue state
+def main():
+
+
+    pass
+
+if __name__== __main__:
+    main()

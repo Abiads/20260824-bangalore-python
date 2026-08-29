@@ -19,3 +19,10 @@ HINTS:
 # TODO: Check if resource exists in train
 # TODO: If exists, count occurrences and find first index
 # TODO: If not exists, print not found message
+def main():
+
+
+    pass
+
+if __name__== __main__:
+    main()

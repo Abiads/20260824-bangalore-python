@@ -19,3 +19,10 @@ Example: "Meet me at midnight" → "teeM em ta thgindim"
 # TODO: Create list comprehension to reverse each word
 # TODO: Join reversed words back into sentence
 # TODO: Print encrypted message
+def main():
+
+
+    pass
+
+if __name__== __main__:
+    main()

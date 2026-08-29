@@ -26,3 +26,10 @@ Example: N=5, K=2 → Eliminate 2, 4, 1, 5 → Survivor: 3
   # TODO: Remove soldier at that index
   # TODO: Print eliminated soldier and remaining soldiers
 # TODO: Print final survivor
+def main():
+
+
+    pass
+
+if __name__== __main__:
+    main()
