@@ -55,7 +55,7 @@ def solve():
     print("Vowel Frequencies:")
     for vowel in vowels:
         print(f"{vowel}: {vowel_freq[vowel]}")
-    print(f"Total Consonants: {consonant_count}")
+        print(f"Total Consonants: {consonant_count}")
 
         if lower1[i] == 'a':
             acount += 1
