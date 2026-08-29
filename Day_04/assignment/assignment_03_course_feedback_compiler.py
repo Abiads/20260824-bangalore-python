@@ -14,25 +14,8 @@ Write `compile_feedback(ratings_dict)`:
 """
 
 def compile_feedback(ratings_dict: dict) -> dict:
-    result = {}
-    for course, ratings in ratings_dict.items():
-        valid_ratings = []
-        for val in ratings:
-            try:
-                if val is None:
-                    raise TypeError("None value")
-                valid_ratings.append(float(val))
-            except (ValueError, TypeError):
-                print(f"Warning: Invalid rating value '{val}' in course '{course}' skipped.")
-        
-        try:
-            avg = sum(valid_ratings) / len(valid_ratings)
-            result[course] = round(avg, 2)
-        except ZeroDivisionError:
-            print(f"Warning: No valid ratings found for course '{course}'. Rating set to 0.0.")
-            result[course] = 0.0
-            
-    return result
+    # TODO: Implement your solution here
+    pass
 
 if __name__ == "__main__":
     feedback_data = {
@@ -40,6 +23,7 @@ if __name__ == "__main__":
         "Machine Learning": [],
         "Deep Learning": ["Good", "Average", None]
     }
+    # Test your function
     averages = compile_feedback(feedback_data)
     print("Feedback Averages:", averages)
 

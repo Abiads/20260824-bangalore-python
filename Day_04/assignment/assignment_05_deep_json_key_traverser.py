@@ -12,18 +12,8 @@ Write `traverse_nested_config(config_dict, path_str, default=None)`:
 """
 
 def traverse_nested_config(config_dict: dict, path_str: str, default=None):
-    if not path_str or not isinstance(config_dict, dict):
-        return default
-        
-    keys = path_str.split(".")
-    curr = config_dict
-    
-    try:
-        for k in keys:
-            curr = curr[k]
-        return curr
-    except (KeyError, TypeError, AttributeError):
-        return default
+    # TODO: Implement your solution here
+    pass
 
 if __name__ == "__main__":
     config = {
@@ -37,7 +27,5 @@ if __name__ == "__main__":
         },
         "database": "postgresql://localhost:5432"
     }
-    print("Valid path:", traverse_nested_config(config, "server.ssl.cert_path"))
-    print("Missing key (default):", traverse_nested_config(config, "server.database.username", "guest"))
-    print("TypeError on string indexing (default):", traverse_nested_config(config, "database.host", "localhost"))
+    # Test key traversal
 

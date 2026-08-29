@@ -18,29 +18,10 @@ class InvalidPhoneNumberError(Exception):
     pass
 
 def register_contact(phonebook: dict, name: str, phone_input: str) -> dict:
-    if not name or not all(c.isalpha() or c.isspace() for c in name):
-        raise ValueError("Contact name must be a non-empty alphabetic string.")
-    
-    try:
-        int(phone_input)
-    except ValueError:
-        raise InvalidPhoneNumberError("Phone number must contain digits only.")
-        
-    phonebook[name] = str(phone_input)
-    return phonebook
+    # TODO: Implement your solution here
+    pass
 
 if __name__ == "__main__":
     contacts = {}
-    contacts = register_contact(contacts, "Alice", "0987654321")
-    print("Registered Alice:", contacts)
-    
-    try:
-        register_contact(contacts, "Bob", "123-456-789")
-    except InvalidPhoneNumberError as e:
-        print("Caught expected error:", e)
-        
-    try:
-        register_contact(contacts, "Bob123", "9876543210")
-    except ValueError as e:
-        print("Caught expected error:", e)
+    # Test valid and invalid registrations
 
