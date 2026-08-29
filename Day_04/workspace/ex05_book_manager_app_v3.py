@@ -1,4 +1,5 @@
-from pprint import pprint
+import subprocess
+
 
 def menu():
     """
@@ -16,10 +17,13 @@ def menu():
     print("3. Edit a book record")
     print("4. Delete a book")
 
-    choice = int(input('Enter your choice: '))
-
-    if choice < 0 or choice > 4:
+    try:
+        choice = int(input('Enter your choice: '))
+        if choice < 0 or choice > 4:
+            choice = -1
+    except:
         choice = -1
+        
 
     return choice
 
@@ -32,10 +36,26 @@ books = [
 def add_book():
     b = {}
     print("Enter book details: ")
-    b["id"] = int(input("ID: "))
+
+    while True:
+        try:
+            b["id"] = int(input("ID: "))
+        except:
+            user_input = input("Invalid value was entered. Enter 'r' to retry, any other key to go back to main menu.")
+
+            if user_input != 'r':
+                return
+        else:
+            break
+
     b['title'] = input("Title: ")
     b['author'] = input("Author: ")
-    b['price'] = float(input("Price: "))
+
+    try:
+        b['price'] = float(input("Price: "))
+    except:
+        print('Invalid value for price. Value was set to 0.0')
+        b['price'] = 0
 
     books.append(b)
 
@@ -50,15 +70,25 @@ def view_books():
 
 
 def edit_book():
-    book_id = int(input("Enter id of the book to edit: "))
+    while True:
+        try:
+            book_id = int(input("Enter book id to edit: "))
+        except:
+            user_input = input("Invalid value was entered. Enter 'r' to retry, any other key to go back to main menu: ")
 
-    book_ids = [b[0] for b in books] # list of books transformed into a list of ids
+            if user_input != 'r':
+                return
+        else:
+            break
+
+
+    book_ids = [b["id"] for b in books] # list of books transformed into a list of ids
     if book_id not in book_ids:
         print("No such book. Try again.")
         return
 
-    the_book = [b for b in books if b[0]==book_id][0]
-    _, title, author, price = the_book
+    the_book = [b for b in books if b["id"]==book_id][0]
+    _, title, author, price = the_book.values()
 
     _title = input(f'Title: ({title}) ')
     if _title == "":
@@ -72,29 +102,43 @@ def edit_book():
     if _price == "":
         _price = price
     else:
-        _price = float(_price)
+        try:
+            _price = float(_price)
+        except:
+            print("Invalid value for price. Remains unchanged.")
+            _price = price
 
-    the_book[1] = _title
-    the_book[2] = _author
-    the_book[3] = _price
+    the_book["title"] = _title
+    the_book["author"] = _author
+    the_book["price"] = _price
 
     print("The book is updated successfully!")
 
 
 def delete_book():
-    book_id = int(input("Enter id of the book to delete: "))
+    while True:
+        try:
+            book_id = int(input("Enter book id to delete: "))
+        except:
+            user_input = input("Invalid value was entered. Enter 'r' to retry, any other key to go back to main menu: ")
 
-    book_ids = [b[0] for b in books] # list of books transformed into a list of ids
+            if user_input != 'r':
+                return
+        else:
+            break
+
+
+    book_ids = [b["id"] for b in books] # list of books transformed into a list of ids
     if book_id not in book_ids:
         print("No such book. Try again.")
         return
 
-    the_book = [b for b in books if b[0]==book_id][0]
+    the_book = [b for b in books if b["id"]==book_id][0]
     print("Book found!")
-    print(f"ID          : {the_book[0]}")
-    print(f"Title       : {the_book[1]}")
-    print(f"Author      : {the_book[2]}")
-    print(f"Price       : {the_book[3]}")
+    print(f"ID          : {the_book["id"]}")
+    print(f"Title       : {the_book["title"]}")
+    print(f"Author      : {the_book["author"]}")
+    print(f"Price       : {the_book["price"]}")
 
     print()
     ans = input("Are you sure you want to delete this book? (yes/no): ")
@@ -108,6 +152,7 @@ def delete_book():
 
 def main():
     while True:
+        subprocess.call(["cls"], shell=True)
         user_choice = menu()
 
         if user_choice == 0:
@@ -125,6 +170,7 @@ def main():
             print("Invalid choice! Please retry with valid value.")
 
         print()
+        input("Hit RETURN/ENTER key  to continue")
     print("Bye!")
 
 
