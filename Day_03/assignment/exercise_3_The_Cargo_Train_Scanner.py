@@ -20,9 +20,16 @@ HINTS:
 # TODO: If exists, count occurrences and find first index
 # TODO: If not exists, print not found message
 def main():
+    train = ["coal", "iron", "gold", "coal", "timber", "coal"]
+    resource = input("Enter the resource to scan: ").strip().lower()
 
+    if resource in train:
+        count = train.count(resource)
+        index = train.index(resource)
+        print(f"Resource '{resource}' found {count} time(s) on the train.")
+        print(f"First index: {index}")
+    else:
+        print("Resource not found on train!")
 
-    pass
-
-if __name__== __main__:
+if __name__ == "__main__":
     main()

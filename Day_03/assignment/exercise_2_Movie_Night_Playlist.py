@@ -23,11 +23,18 @@ HINTS:
 # TODO: Print the sorted playlist
 
 def main():
+    list1= ["Inception", "The Matrix", "Interstellar"]
+    str1=input("Enter the Name of the movie\n")
+    
+    if str1 in list1:
+        print("Already added!")
+    else:
+        list1.append(str1)
+        list1.sort()
+        print("Sorted playlist:")
+        print(list1)
 
-
-    pass
-
-if __name__== __main__:
+if __name__== "__main__":
     main()
 
 
