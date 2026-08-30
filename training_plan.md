@@ -16,8 +16,66 @@ To maximize student comprehension and build a cohesive learning path, we have re
 4. **Functions & RegEx (Day 5)**: **Functions and Methods** (Sessions 7 & 8) are positioned on Day 5. With control flow, data structures (Lists, Tuples, Dictionaries, Strings), and Exception Handling already covered, students are fully equipped to write clean, robust, modular functions and apply Regular Expressions.
 5. **Clean Transition to OOP (Day 6)**: **Object-Oriented Programming** (Sessions 10 & 11) is placed on Day 6, immediately following functions. This is the natural progression from procedural/functional code to object-oriented structures.
 6. **Standard Tools & DBs (Day 7)**: Standard Libraries, Debugging, Logging (Session 13) and Databases (Session 19) are grouped on Day 7 to solidify backend development before diving into external scientific packages.
-7. **Integrated Data Science Suite (Days 8-10)**: We have consolidated **NumPy, SciPy, Pandas** (Sessions 14-16) and **Data Visualization** (Sessions 17-18) into a logical 3-day data analytics sequence. Day 8 introduces numerical and tabular data; Day 9 wraps up data wrangling and starts visualization; Day 10 concludes visualization.
-8. **Web Frameworks & Scraping (Days 10-11)**: Flask/Django (Sessions 20-21) and Web Scraping (Session 22) are grouped at the end of the course to teach web service creation and consumption consecutively.
+7. **Integrated Data Science Suite (Days 8-9)**: We have consolidated **NumPy, SciPy, Pandas** (Sessions 14-16) and **Data Visualization** (Sessions 17-18) into a logical 2-day data analytics sequence. Day 8 introduces numerical and tabular data; Day 9 wraps up data wrangling, static plotting (Matplotlib/Seaborn), and interactive visualizations (Plotly).
+8. **Web Frameworks & Scraping (Days 10-11)**: **Flask** (Sessions 20-21) is covered on Day 10 (routing & core templates) and Day 11 (database integration & templates), followed by Web Scraping (Session 22) on Day 11.
+
+---
+
+## Environment Setup & External Packages
+
+To compile and execute all course examples, lab tasks, and assignments, students must configure their Python environment with the required libraries. **It is highly recommended to use a virtual environment rather than installing packages globally.**
+
+### 1. Creating and Activating a Virtual Environment
+A virtual environment isolates your project dependencies, ensuring that packages installed for this course do not conflict with other Python projects on your machine.
+
+* **Step A: Create the environment**
+  Open your terminal, navigate to your workspace directory, and run:
+  ```bash
+  # 'venv' is the standard module, '.venv' is the name of our environment folder
+  python -m venv .venv
+  ```
+* **Step B: Activate the environment**
+  - **macOS / Linux**:
+    ```bash
+    source .venv/bin/activate
+    ```
+  - **Windows (Command Prompt)**:
+    ```cmd
+    .venv\Scripts\activate.bat
+    ```
+  - **Windows (PowerShell)**:
+    ```powershell
+    .venv\Scripts\Activate.ps1
+    ```
+  *Once activated, your terminal prompt will show `(.venv)` at the beginning.*
+
+### 2. Jupyter Notebook Setup (Days 8-9)
+For the data science and visualization modules, classes will showcase and use **Jupyter Notebooks** to permit step-by-step code execution, inline visualizations, and interactive inspection of data structures.
+* With your virtual environment activated, install Jupyter:
+  ```bash
+  pip install jupyter
+  ```
+* Launch the local server:
+  ```bash
+  jupyter notebook
+  ```
+* *Alternatively*: Run `.ipynb` notebook files inside VS Code by installing the official **Jupyter Extension** (which will automatically detect your active `.venv` environment).
+
+### 3. Complete Course Package Directory
+Ensure all required third-party libraries are installed in your active virtual environment.
+
+| Module / Topic | Required Packages | Purpose |
+| :--- | :--- | :--- |
+| **Data Science (Day 8)** | `numpy`, `scipy`, `pandas` | Numeric computing, linear algebra, optimization, and tabular dataframes. |
+| **Data Visualization (Days 8-9)** | `matplotlib`, `seaborn`, `plotly` | Static charts, boxplots, regression plots, and interactive HTML dashboards. |
+| **Web Frameworks (Days 10-11)** | `flask` | Lightweight micro-service routing and Jinja2 templates. |
+| **Web Scraping (Day 11)** | `requests`, `beautifulsoup4`, `scrapy`, `lxml` | HTTP request routing, HTML DOM parser engines, and recursive crawlers. |
+
+### 4. Unified Installation Command
+With your virtual environment activated, run the following command to install all required packages at once:
+```bash
+pip install jupyter numpy scipy pandas matplotlib seaborn plotly flask requests beautifulsoup4 scrapy lxml html5lib
+```
 
 ---
 
@@ -161,32 +219,34 @@ To maximize student comprehension and build a cohesive learning path, we have re
 
 ---
 
-### Day 9: Data Wrangling with Pandas & Data Visualization (Part 1)
-* **Theory Duration**: 4 Hours (Mapped to Sessions 14, 15 & 16 [Part 2 - 2T] & Sessions 17 & 18 [Part 1 - 2T])
-* **Core Focus**: Data cleansing, grouping, transformation, and static data plotting.
+### Day 9: Data Wrangling with Pandas & Data Visualization (Static & Interactive)
+* **Theory Duration**: 4 Hours (Mapped to Sessions 14, 15 & 16 [Part 2 - 2T] & Sessions 17 & 18 [4T])
+* **Core Focus**: Data cleansing, grouping, transformation, static plotting, and interactive visualization.
 * **Theory Topics Covered**:
   * Data wrangling, merging, filtering, grouping, and aggregations using Pandas
   * Data Visualization: Plotting fundamentals with Matplotlib and Seaborn
+  * Advanced Visualization: Interactive plotting using ggplot and Plotly
 * **Lab Assignments**:
-  * **Q1 (Pandas)**: Read the movie users dataset from `http://bit.ly/movieusers` (pipe-separated, no headers):
+  * **Q1 (Pandas & Plotly)**: Read the movie users dataset from `http://bit.ly/movieusers` (pipe-separated, no headers):
     1. Add headings to the columns: `sr.no`, `age`, `Gender`, `profession`, `Views`.
     2. Display only the `gender` column.
     3. Add a new column (`col6`) concatenating `age` and `gender` separated by a colon (`:`).
     4. Group the data by age/profession, find the average views, and plot the aggregations.
+    5. Generate a Plotly interactive chart showing top 10 occupation distributions.
   * **Q2 (Visualization)**: Store product sales data for years 2010 to 2014 (5 products per year) in a list structure. Create:
     1. A stacked bar graph and a pie chart comparing yearly sales.
     2. Five separate pie charts (one for each year) representing product sales and the average sale of each product.
 
 ---
 
-### Day 10: Advanced Visualization & Web Frameworks (Part 1)
-* **Theory Duration**: 4 Hours (Mapped to Sessions 17 & 18 [Part 2 - 2T] & Sessions 20 & 21 [Part 1 - 2T])
-* **Core Focus**: Modern interactive visualization libraries and web development basics.
+### Day 10: Web Frameworks (Part 1) — Introduction & Core Routing
+* **Theory Duration**: 4 Hours (Mapped to Sessions 20 & 21 [Part 1 - 4T])
+* **Core Focus**: Web architecture, MVC/MTV patterns, web routing, and basic view templates.
 * **Theory Topics Covered**:
-  * **Visualization**: Interactive plotting using ggplot and Plotly
   * **Web Frameworks**: Introduction to MVC/MTV architectures, comparing Flask and Django, routing, and creating basic view templates
+  * **Request Handling**: Query string arguments, URL path variables, and processing HTTP methods (GET/POST)
 * **Lab Assignments**:
-  * **Q1 (Flask/Django)**: Initialize a basic web application using Flask or Django. Create a multi-route app containing:
+  * **Q1 (Flask)**: Initialize a basic web application using Flask. Create a multi-route app containing:
     * A Home page displaying a welcome message.
     * An About page rendering a static template.
     * An API route returning JSON data.
@@ -200,7 +260,7 @@ To maximize student comprehension and build a cohesive learning path, we have re
   * **Web Frameworks**: Integrating databases with web frameworks, form submissions, and handling templates
   * **Web Scraping**: Working with the `requests` library, `urllib`, and building web scrapers using `Scrapy`
 * **Lab Assignments**:
-  * **Q1 (Web App)**: Build out the Flask/Django application to dynamically fetch and display a list of items from a SQLite database, allowing user form submissions to append items to the database.
+  * **Q1 (Web App)**: Build out the Flask application to dynamically fetch and display a list of items from a SQLite database, allowing user form submissions to append items to the database.
   * **Q2 (Web Scraping)**: Create a web crawler using `Scrapy` (or the `requests` and `BeautifulSoup` libraries) to scrape specific data fields (such as item names, prices, or article headlines) from a public web page and save them to a file.
 
 ---
@@ -217,8 +277,8 @@ To maximize student comprehension and build a cohesive learning path, we have re
 | **Day 6** | 4 Hours | OOP Concepts (Classes, Objects, Inheritance, Overloading, Polymorphism, Decorators) | Naturally follows procedural programming, using classes to model complex entities. |
 | **Day 7** | 4 Hours | Standard Libraries, Logging, Debugging, & Databases (DB-API) | Covers essential diagnostic tooling and data persistence before importing data science suites. |
 | **Day 8** | 4 Hours | NumPy & SciPy Foundations, Pandas Introduction (DataFrames, Series) | Commences the data science block, mapping numeric processing to tabular data frames. |
-| **Day 9** | 4 Hours | Pandas Advanced Wrangling, Data Visualization (Matplotlib, Seaborn) | Transition from data loading/wrangling directly to visual representations. |
-| **Day 10** | 4 Hours | Advanced Visualization (Plotly, ggplot), Web Frameworks Introduction (Flask/Django) | Concludes visualization and introduces web development concepts. |
+| **Day 9** | 4 Hours | Pandas Advanced Wrangling, Data Visualization (Matplotlib, Seaborn, Plotly) | Covers advanced data wrangling and all data visualization formats (static and interactive). |
+| **Day 10** | 4 Hours | Web Frameworks Introduction (Flask), Core Routing & Templates | Covers web architectures, route mapping, request handling, and templates. |
 | **Day 11** | 4 Hours | Web Frameworks Advanced (DB integrations), Web Scraping (Requests, urllib, Scrapy) | Completes web frameworks and transitions directly into scraping data from external websites. |
 
 ---
