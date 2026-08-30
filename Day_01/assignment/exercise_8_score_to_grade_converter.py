@@ -21,13 +21,14 @@ def solve():
 
     }
 
+    if num > 100:
+        print("Invalid score! Score cannot be more than 100.")
+        return solve()   #Added a condition to handle errors
+
     if num >= 60:
         print(gpa.get(num//10))
     else:
         print("F")
-
-
-
 
 
 if __name__ == "__main__":

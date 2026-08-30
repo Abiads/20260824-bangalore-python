@@ -25,13 +25,14 @@ Write a program that prompts the user to enter an email address string. Extract 
 """
 
 def solve():
-    email = input("Enter an email: ")
     
-    if email.count('@') == 1:
-        domain = email.split('@')[1]
-        print(domain)
+    email = input("Enter an email: ")
+
+    if email.count("@") != 1:
+        print("Invalid ID!")
     else:
-        print("Invalid Email")
+        email_split = email.split("@")[1]
+        print(email_split)
 
 if __name__ == "__main__":
     solve()
