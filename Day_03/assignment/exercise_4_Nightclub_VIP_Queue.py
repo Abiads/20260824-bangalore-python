@@ -26,9 +26,17 @@ HINTS:
 # TODO: If not on list, print access denied
 # TODO: Print updated queue state
 def main():
-
-
-    pass
-
-if __name__== __main__:
+  str1=["Guido", "Esha", "Rajan", "Kishori"]
+  while True:
+    str2=input("Enter the Name of the guest\n")
+    if str2=="exit":
+      break
+    if str2 in str1:
+      str1.remove(str2)
+      str1.insert(0,str2)
+    else:
+      print("Access denied. Not on the VIP list.")
+  print("Updated queue state:")
+  print(str1)
+if __name__== "__main__":
     main()
