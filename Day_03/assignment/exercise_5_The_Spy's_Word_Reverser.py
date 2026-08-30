@@ -20,9 +20,11 @@ Example: "Meet me at midnight" → "teeM em ta thgindim"
 # TODO: Join reversed words back into sentence
 # TODO: Print encrypted message
 def main():
-
-
-    pass
+    str1=input("Enter the sentence\n")
+    str2=str1.split()
+    str3=[word[::-1] for word in str2]
+    str4=" ".join(str3)
+    print(str4)
 
 if __name__== __main__:
     main()
