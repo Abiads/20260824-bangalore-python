@@ -25,9 +25,15 @@ Example: [45, 88, 30, 98, 50] → [55, 93, 40, 100, 55]
 # TODO: Create list comprehension with curve logic
 # TODO: Print original and curved scores
 def main():
+    scores = input("Enter the scores:")
+    str = scores.split()
+    str1 = list(map(int, str))
+    str4=[min(100, score + (10 if score < 50 else 5) )for score in str1]
+   
+    print(str4)
 
 
-    pass
+    
 
-if __name__== __main__:
+if __name__== "__main__":
     main()
