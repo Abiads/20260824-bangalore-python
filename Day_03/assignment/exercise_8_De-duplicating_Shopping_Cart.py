@@ -22,8 +22,20 @@ Expected output: ['apple', 'banana', 'orange']
 # TODO: Print cleaned cart
 def main():
 
+    # shopping_cart = list(map(str, input().split()))
 
-    pass
+    cart = ["apple", "banana", "apple", "orange", "banana", "banana"]
+    cleaned_cart=[]
+    for i in range(len(cart)):
 
-if __name__== __main__:
+        if cart[i] not in cleaned_cart:
+            cleaned_cart.append(cart)
+    print(cleaned_cart)
+
+    
+
+
+
+
+if __name__== "__main__":
     main()

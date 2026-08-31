@@ -28,7 +28,7 @@ def main():
     scores = input("Enter the scores:")
     str = scores.split()
     str1 = list(map(int, str))
-    str4=[min(100, score + (10 if score < 50 else 5) )for score in str1]
+    str4=[min(100, (score + 10 if score < 50 else score + 5) )for score in str1]
    
     print(str4)
 
