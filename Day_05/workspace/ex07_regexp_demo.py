@@ -8,7 +8,7 @@ def demo_search_and_match():
     Also demonstrates how to retrieve information from a Match object.
     """
     print("--- Demo: re.search() vs re.match() ---")
-    text = "Python programming is fun and Python is powerful."
+    text = "Java programming is fun and Python is powerful."
     pattern = "Python"
 
     # re.match() searches only at the beginning
@@ -89,7 +89,7 @@ def demo_split():
     """
     print("--- Demo: re.split() ---")
     # A string with multiple separators: commas, semicolons, spaces, and colons
-    text = "apple, banana; cherry  orange:grape"
+    text = "apple, banana; cherry;;;;;  orange:grape"
     pattern = r"[,\s;:]+"  # Split by comma, whitespace, semicolon, or colon (one or more)
 
     words = re.split(pattern, text)
@@ -155,7 +155,9 @@ def demo_groups_capturing():
     
     # 1. Positional/Numbered Groups
     date_text = "Today's date is 2026-08-31."
+    # date_pattern = r"\d{4}-\d{2}-\d{2}"  # no group here
     date_pattern = r"(\d{4})-(\d{2})-(\d{2})"  # Groups for year, month, day
+    # date_pattern = r"(?P<year>\d{4})-(?P<mon>\d{2})-(?P<day>\d{2})"  # Named groups for year, month, day
 
     match = re.search(date_pattern, date_text)
     if match:
@@ -185,13 +187,13 @@ def main():
     print("================ Regular Expression Demos ================")
     # Uncomment any of the functions below to run the demo.
     
-    # demo_search_and_match()
+    demo_search_and_match()
     # demo_fullmatch()
     # demo_findall_and_finditer() 
     # demo_split()
     # demo_sub_and_subn()
     # demo_compilation_and_flags()
-    demo_groups_capturing()
+    # demo_groups_capturing()
     print("==========================================================")
 
 if __name__ == "__main__":
