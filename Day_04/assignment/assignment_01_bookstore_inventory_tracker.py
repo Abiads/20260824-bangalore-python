@@ -19,15 +19,21 @@ Write a function `manage_bookstore_inventory(inventory, action, book_title, quan
 Returns the updated inventory dictionary (or stock value for lookup).
 """
 
-def manage_bookstore_inventory(inventory: dict, action: str, book_title: str, quantity: int = 0):
-    # TODO: Implement your solution here
-    pass
+def manage_bookstore_inventory(book_title: str, quantity: int = 0):
+    if 'book_title' in inventory:
+        inventory['quantity'] += quantity
+    else:
+        inventory['book_title'] = 'book_title'   
+
+    print(inventory.get('quantity'))
+    
 
 if __name__ == "__main__":
     inventory = {"Python Basics": 10, "Learning AI": 5}
     print("Initial:", inventory)
     
     # Test your function
-    inventory = manage_bookstore_inventory(inventory, "add", "Python Basics", 5)
-    print("After add:", inventory)
+    inventory = manage_bookstore_inventory("Python Basics", 5)
+    # print("After add:", inventory)
+
 

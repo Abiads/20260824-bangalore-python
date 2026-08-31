@@ -27,9 +27,27 @@ Example: N=5, K=2 → Eliminate 2, 4, 1, 5 → Survivor: 3
   # TODO: Print eliminated soldier and remaining soldiers
 # TODO: Print final survivor
 def main():
+    n = int(input("Number of soldiers: "))
+    k = int(input("Elimination interval: "))
+    soldier_circle = []
+    
+    for i in range(n):
+        soldier_circle.append(i+1)
+        print(soldier_circle)
+
+    index = 0
+    while len(soldier_circle) > 1:
+
+        index = (index + k-1)% len(soldier_circle)
+        soldier_circle.pop(index)
+        index += 1
+
+        # print(i)
+        # print(soldier_circle)
+        
+    print(f'survivor in soldier circle is {soldier_circle}')
 
 
-    pass
-
-if __name__== __main__:
+    
+if __name__== "__main__":
     main()
