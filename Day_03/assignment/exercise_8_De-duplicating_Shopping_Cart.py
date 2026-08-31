@@ -20,10 +20,12 @@ Expected output: ['apple', 'banana', 'orange']
 # TODO: Check if item is not already in cleaned_cart
 # TODO: If not present, append it
 # TODO: Print cleaned cart
+
+
 def main():
+    ...
+    
 
 
-    pass
-
-if __name__== __main__:
+if __name__== "__main__":
     main()

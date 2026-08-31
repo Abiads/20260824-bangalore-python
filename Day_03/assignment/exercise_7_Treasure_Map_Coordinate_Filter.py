@@ -19,8 +19,19 @@ Expected output: [[12, 5], [15, 9]]
 # TODO: Print valid coordinates
 def main():
 
+    # coords = [[12, 5], [-3, 14], [8, -2], [15, 9], [-5, -6]]
+    # ns = [[x,y] for x,y in coords if x>0 and y>0] 
+    # print(ns)
+    
+    x = int(input("Enter the number of coordinates:"))
+    nested_list = []
 
-    pass
-
-if __name__== __main__:
+    for i in range(x):
+        row = list(map(int, input().split()))
+        if row[i]>0:
+            nested_list.append(row)
+    selected_coords =  [[x,y] for x,y in nested_list if x>0 and y>0]
+    print(selected_coords)
+       
+if __name__=="__main__":
     main()
