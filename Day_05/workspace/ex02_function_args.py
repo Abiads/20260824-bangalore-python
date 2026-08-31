@@ -23,7 +23,9 @@ msg = greet(city='Bangalore')
 print(msg)
 
 p1 = dict(name='Vinod', city='Bangalore')
+# to unpack a dict, we have to use **
 print(greet(**p1))
 
 p2 = ['Vinay', 'Hassan']
+# to unpack a tuple or list, we have to use *
 print(greet(*p2))
