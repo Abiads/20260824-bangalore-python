@@ -1,0 +1,14 @@
+Major elements of OOP:
+    - Abstraction
+    - Encapsulation
+    - Modularity
+    - Hierarchy
+        - Inheritance IS-A
+            - Polymorphism is a side-effect of inheritance
+        - Aggregation HAS-A
+            - Composition (stronger form of aggregation)
+
+Minor elements of OOP:
+    - Typing
+    - Persistence
+    - Concurrency
