@@ -28,20 +28,41 @@ Write a program that prompts the user to enter a text string and finds the longe
 5. Print `longest_palindrome`.
 """
 
-def solve():
-    text = input("Enter a text string: ")
-    longest_palindrome = ""
+# def solve():
+#     text = input("Enter a text string: ")
+#     longest_palindrome = ""
     
+#     for i in range(len(text)):
+#         for j in range(i + 1, len(text) + 1):
+#             substring = text[i:j]
+#             if substring == substring[::-1] and len(substring) > len(longest_palindrome):
+#                 longest_palindrome = substring
+    
+#     if longest_palindrome:
+#         print(longest_palindrome)
+#     else:
+#         print("")
+
+# if __name__ == "__main__":
+#     solve()
+
+
+def solve():
+    text = input("enter a text string: ")
+    longest_palindrome = ""
+
     for i in range(len(text)):
-        for j in range(i + 1, len(text) + 1):
-            substring = text[i:j]
+        for j in range(i, len(text)):
+            substring = text[i:j+1]         
             if substring == substring[::-1] and len(substring) > len(longest_palindrome):
                 longest_palindrome = substring
-    
-    if longest_palindrome:
-        print(longest_palindrome)
+
+    if len(longest_palindrome) > 1:
+        print(f'The longest palindrome in the text is {longest_palindrome}')
     else:
-        print("")
+        print("Sorry found no pallindrome")
+
+
 
 if __name__ == "__main__":
     solve()
