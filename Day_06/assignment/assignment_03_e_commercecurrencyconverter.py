@@ -37,8 +37,6 @@ try:
 except ValueError as e:
     print(e)  # Output: Cannot add price amounts with different currencies: 'USD' and 'EUR'.
 ```
-
----
 """
 
 def solve():

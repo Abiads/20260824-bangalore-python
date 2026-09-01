@@ -23,10 +23,6 @@ truck = DeliveryTruck("Volvo", "FH16", 300.0, cargo_load=2.0)
 print(truck.calculate_range(5.0)) # Output: 1200.0
 print(truck.get_description())    # Output: Truck: Volvo FH16 carrying 2.0 tons
 ```
-
----
-
-## Medium Assignments
 """
 
 def solve():

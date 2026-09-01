@@ -34,8 +34,6 @@ try:
 except ValueError as e:
     print(e)  # Output: Temperature must be between 10.0 and 35.0 degrees.
 ```
-
----
 """
 
 def solve():

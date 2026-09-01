@@ -33,10 +33,6 @@ except ValueError as e:
 
 print(Patient.get_total_patients())  # Output: 1
 ```
-
----
-
-## Difficult Assignments
 """
 
 def solve():

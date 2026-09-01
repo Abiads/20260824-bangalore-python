@@ -1,17 +1,38 @@
 """
-Assignment 2: Robust Phonebook Contact Registry
+### Assignment 2: Robust Phonebook Contact Registry
+#### Scenario
+You are writing a Command-Line Interface (CLI) contact registry that maps user names to their phone numbers. The program needs to validate user inputs robustly to prevent corrupted formatting or empty values from breaking the registry database.
 
-Scenario:
-Command-Line Interface contact registry mapping contact names to phone numbers.
-Validates user inputs to prevent corrupted entries.
+#### Problem Description
+1. Define a custom exception class named `InvalidPhoneNumberError` that inherits from `Exception`.
+2. Write a function `register_contact(phonebook, name, phone_input)`:
+   - `phonebook` is a dictionary mapping contact names (strings) to their phone numbers (strings).
+   - Validate the `name` parameter: it must be a non-empty string consisting only of alphabetic characters and spaces. If invalid, raise a standard `ValueError` with the message: `"Contact name must be a non-empty alphabetic string."`
+   - Validate the `phone_input` parameter: it must consist only of digits. Check this by attempting to convert it to an integer using `int()`.
+     - If the conversion fails (raises a `ValueError`), catch that exception and raise your custom `InvalidPhoneNumberError` with the message: `"Phone number must contain digits only."`
+   - If validations pass, store `phone_input` **as a string** in the `phonebook` under the key `name` (preserving any leading zeros).
+   - Return the updated `phonebook` dictionary.
 
-Problem Description:
-1. Define custom exception `InvalidPhoneNumberError(Exception)`.
-2. Write function `register_contact(phonebook, name, phone_input)`:
-   - Validate `name`: non-empty string consisting only of alphabetic characters and spaces. If invalid, raise `ValueError("Contact name must be a non-empty alphabetic string.")`.
-   - Validate `phone_input`: digits only. Attempt `int(phone_input)`. If ValueError occurs, catch it and raise `InvalidPhoneNumberError("Phone number must contain digits only.")`.
-   - If valid, store `phone_input` as string in `phonebook[name]`.
-   - Return updated `phonebook`.
+#### Example Walkthrough
+```python
+contacts = {}
+
+# 1. Valid Input
+contacts = register_contact(contacts, "Alice", "0987654321")
+# Result: {"Alice": "0987654321"}
+
+# 2. Invalid Phone Number (Raises InvalidPhoneNumberError)
+try:
+    contacts = register_contact(contacts, "Bob", "123-456-789")
+except InvalidPhoneNumberError as e:
+    print(e)  # Output: Phone number must contain digits only.
+
+# 3. Invalid Name (Raises ValueError)
+try:
+    contacts = register_contact(contacts, "Bob123", "9876543210")
+except ValueError as e:
+    print(e)  # Output: Contact name must be a non-empty alphabetic string.
+```
 """
 
 class InvalidPhoneNumberError(Exception):
