@@ -28,9 +28,10 @@ Write a program that prompts the user for a text string and a shift integer, and
 
 def solve():
     text = input("Enter a string: ")
-    shift = int(input("Enter shift value: "))
-    
+    shift = int(input("Enther a shift value: "))
+
     encrypted = ""
+
     for char in text:
         if char.isupper():
             encrypted += chr((ord(char) - ord('A') + shift) % 26 + ord('A'))
@@ -38,8 +39,8 @@ def solve():
             encrypted += chr((ord(char) - ord('a') + shift) % 26 + ord('a'))
         else:
             encrypted += char
-    
-    print(encrypted)
+
+    print(f'The encryption is succesfull: {encrypted}')
 
 if __name__ == "__main__":
     solve()

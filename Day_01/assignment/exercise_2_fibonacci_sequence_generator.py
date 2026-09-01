@@ -13,9 +13,9 @@ def solve():
     for i in range(n):
         print(a, end = ", " if i < n-1 else " ")
         
-        temp = b
-        b = a + b
-        a = temp 
+        temp = a+b
+        a = b
+        b = temp
 
 if __name__ == "__main__":
     solve()

@@ -7,11 +7,12 @@ Write a program that prompts the user for an integer and prints whether it is ev
 """
 
 def solve():
-    num = int(input("Enter value: "))
+    num = int(input("Enter value: ")) 
 
     if num < 0:
         print("Enter a positive value")
-        return
+        # return
+        solve()
 
     if num % 2 == 0:
         print(f'{num} is an even number')

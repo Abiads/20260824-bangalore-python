@@ -12,12 +12,13 @@ def solve():
     num = int(input("Enter a positive integer: "))
     a = num // 2
 
-    if num <= 0:
+    if num <= 1:
         print("Retry")
+        solve()
     else:
-        for i in range(2, a+1):
+        for i in range(2, a):
             if num % i == 0:
-                print(f'{num} is not a prime number as its divisible by {i}')
+                print(f'{num} is not a prime number as its lowest divisor is {i}')
                 break
         else:
             print(f'{num} is a prime number')

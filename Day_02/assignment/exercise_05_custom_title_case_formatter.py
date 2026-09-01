@@ -29,8 +29,7 @@ Write a program that accepts a string input from the user and outputs it in Titl
 
 def solve():
     text = input("Enter a string:")
-    text = text.lower()
-    words = text.split()
+    words = text.lower().split()
     number_of_words = len(words)
 
     # print(type(number_of_words))
