@@ -3,9 +3,11 @@ from vinutils import line
 line()
 
 class Book:
-    def __init__(this, title=None, author=None):
-        this.title = title
-        this.author = author
+    def __init__(self, title=None, author=None):
+        # at this time, the object has no attributes
+        self.title = title
+        self.author = author
+        # at this time, the object has two attributes - title and author
 
     def __str__(self):
         """

@@ -11,19 +11,15 @@ class Employee:
         print(f'Salary    : Rs.{self.salary}')
         print("--------------------")
 
-    def __str__(self):
-        return  f'Employee - {self.name}'
-
 
 def main():
-    e1 = Employee(name='Kishore', dept='ADMIN', salary=45000)
+    e1 = Employee(name='Kishore', dept='ADMIN', salary=45000, email='kishore@xmpl.com')
     e2 = Employee(name='Kiran', salary=37000)
-    e1.print()
-    # e2.print()
-    Employee.print(e2)
+    e1.print()  # print() function is called by python which passes e1 as the first argument
+    e2.print()
+    # Employee.print(e2)
 
     e2.dept = 'ACCOUNTING'
-    # e2.print()
-    print(e2.print())
+    e2.print()
 
 main()
