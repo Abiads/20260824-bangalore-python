@@ -14,8 +14,34 @@ Write `compile_feedback(ratings_dict)`:
 """
 
 def compile_feedback(ratings_dict: dict) -> dict:
-    # TODO: Implement your solution here
-    pass
+    averages = {}
+    #imp assignment
+    for course, ratings in ratings_dict.items():
+        total = 0
+        count = 0
+        for val in ratings:
+            try:
+                rating = float(val)
+                total += rating
+                count += 1
+            except (ValueError, TypeError):
+                print(
+                    f"Warning: Invalid rating value '{val}' "
+                    f"in course '{course}' skipped."
+                )
+                continue
+
+        try:
+            average = total / count
+        except ZeroDivisionError:
+            print(
+                f"Warning: No valid ratings found for course "
+                f"'{course}'. Rating set to 0.0."
+            )
+            average = 0.0
+        averages[course] = round(average, 2)
+    return averages
+
 
 if __name__ == "__main__":
     feedback_data = {
