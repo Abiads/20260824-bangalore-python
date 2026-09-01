@@ -17,11 +17,34 @@ Problem Description:
 class InvalidPhoneNumberError(Exception):
     pass
 
-def register_contact(phonebook: dict, name: str, phone_input: str) -> dict:
-    # TODO: Implement your solution here
-    pass
+def register_contact(contacts, name, phone_input):
+    if not name or not name.replace(" ", "").isalpha():
+        raise ValueError("Contact name must be a non-empty alphabetic string.")
+    
+    try:
+        int(phone_input)
+    except ValueError:
+        raise InvalidPhoneNumberError("Phone number must contain digits only.")
+    
+    contacts[name] = phone_input
+    return contacts
 
-if __name__ == "__main__":
-    contacts = {}
-    # Test valid and invalid registrations
+
+contacts = {}
+
+
+contacts = register_contact(contacts, "Alice", "0987654321")
+
+
+
+try:
+    contacts = register_contact(contacts, "Bob", "123-456-789")
+except InvalidPhoneNumberError as e:
+    print(e)  
+
+
+try:
+    contacts = register_contact(contacts, "Bob123", "9876543210")
+except ValueError as e:
+    print(e)  
 
