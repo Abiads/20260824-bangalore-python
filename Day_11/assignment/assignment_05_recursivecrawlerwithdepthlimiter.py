@@ -30,8 +30,6 @@ crawler_map = recursive_link_crawler("https://quotes.toscrape.com/", max_depth=1
 for page, links in crawler_map.items():
     print(f"Page: {page} | Found {len(links)} internal links.")
 ```
-
----
 """
 
 def solve():

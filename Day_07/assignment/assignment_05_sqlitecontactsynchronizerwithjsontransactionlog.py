@@ -56,6 +56,29 @@ except ContactNotFoundError as e:
 # Verify Database Atomicity: Charlie must NOT be inserted into contacts database.
 # sync.log writes "[SYNC FAILED]..."
 ```
+"""
+
+[
+    {"action": "insert", "name": "Alice", "phone": "123", "email": "alice@new.com"},
+    {"action": "update", "name": "Bob", "phone": "999", "email": "bob@new.com"}
+]"""
+sync_contacts_batch("contacts.db", valid_patch, "sync.log")
+# database successfully commits changes. sync.log writes "[SYNC SUCCESS]..."
+
+# Invalid Patch (Raises ContactNotFoundError)
+invalid_patch = """[
+    {"action": "insert", "name": "Charlie", "phone": "444", "email": "charlie@abc.com"},
+    {"action": "delete", "name": "David"}
+]"""
+# David does not exist in the database!
+try:
+    sync_contacts_batch("contacts.db", invalid_patch, "sync.log")
+except ContactNotFoundError as e:
+    print(e) # Output: Contact David not found for deletion
+
+# Verify Database Atomicity: Charlie must NOT be inserted into contacts database.
+# sync.log writes "[SYNC FAILED]..."
+```
 
 ---
 """

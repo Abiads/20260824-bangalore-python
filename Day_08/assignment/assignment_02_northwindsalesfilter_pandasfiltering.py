@@ -24,10 +24,6 @@ print(sales_df.head(2))
 # 0      10248           Queso Cabrales               168.0
 # 1      10248  Singaporean Hokkien...                98.0
 ```
-
----
-
-## Medium Assignments
 """
 
 def solve():

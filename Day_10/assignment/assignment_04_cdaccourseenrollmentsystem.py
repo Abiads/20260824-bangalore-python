@@ -24,10 +24,6 @@ Implement a Flask application with the following parameters and routes:
 3. **Route `/enroll/clear` (POST)**:
    - Clears all elements from the global `ENROLLED_COURSES` list.
    - Redirects the client back to `/enroll` with HTTP status code `303`.
-
----
-
-## Difficult Assignments
 """
 
 def solve():

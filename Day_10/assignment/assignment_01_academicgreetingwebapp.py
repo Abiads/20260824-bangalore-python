@@ -25,8 +25,6 @@ Implement a complete Flask web application containing the following routes:
   `{"obtained": 45, "total": 50, "percentage": 90.0}` with HTTP 200.
 * Requesting `GET /calculate/grade/45/0` returns the JSON payload:
   `{"error": "Total marks must be greater than zero."}` with HTTP 400.
-
----
 """
 
 def solve():

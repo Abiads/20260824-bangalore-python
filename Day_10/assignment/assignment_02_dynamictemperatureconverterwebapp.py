@@ -21,10 +21,6 @@ Implement a Flask application with the following endpoints:
   `{"celsius": 0.0, "fahrenheit": 32.0}` with HTTP 200.
 * Requesting `GET /convert/f_to_c/100.0` returns JSON:
   `{"fahrenheit": 100.0, "celsius": 37.8}` with HTTP 200.
-
----
-
-## Medium Assignments
 """
 
 def solve():

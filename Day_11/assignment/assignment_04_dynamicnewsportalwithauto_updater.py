@@ -20,10 +20,6 @@ Implement a Flask application connected to a local SQLite database named `news.d
      - Loop through the top 10 articles and execute a parameterized SQLite query to insert them into `news.db`.
        - **Constraint**: Use `INSERT OR IGNORE` to prevent database crashes when trying to insert duplicate titles.
      - Commit the transaction, close database resources, and redirect the user back to the homepage `/`.
-
----
-
-## Difficult Assignments
 """
 
 def solve():

@@ -26,10 +26,6 @@ print(loc_res)
 iloc_res = extract_freight_by_position(df, 10, 12, [0, 13])
 print(iloc_res)
 ```
-
----
-
-## Difficult Assignments
 """
 
 def solve():

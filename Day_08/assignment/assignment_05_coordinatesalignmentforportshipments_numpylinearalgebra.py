@@ -36,8 +36,6 @@ print(np.round(aligned))
 # Step 1: Translate -> [[5.0, 5.0], [-5.0, 15.0], [5.0, 15.0]]
 # Step 2: Rotate 90 deg -> [[-5.0, 5.0], [-15.0, -5.0], [-15.0, 5.0]]
 ```
-
----
 """
 
 def solve():

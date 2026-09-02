@@ -34,10 +34,6 @@ print(load_config_safely("corrupt.json"))
 # Output: Error: Invalid JSON syntax.
 # Returns: {"status": "default", "port": 8080}
 ```
-
----
-
-## Medium Assignments
 """
 
 def solve():

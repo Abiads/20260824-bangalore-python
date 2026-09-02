@@ -14,10 +14,6 @@ Write a function `generate_freight_chart(df, output_html_path)`:
      - Enable markers on the data points.
      - Add a custom title: `"Northwind Order Freight Costs by Shipping Carrier"`.
 3. **Save**: Save the interactive chart as a standalone HTML file to `output_html_path` using `fig.write_html()`.
-
----
-
-## Medium Assignments
 """
 
 def solve():

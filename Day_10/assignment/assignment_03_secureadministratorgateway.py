@@ -23,8 +23,6 @@ Implement a Flask application containing the following endpoints:
    - Returns a formatted HTML page heading: `"<h1>Welcome to the Admin Dashboard!</h1>"`.
 3. **Route `/login-failed` (GET)**:
    - Returns a JSON error response payload: `{"status": "Unauthorized", "message": "Invalid credentials provided."}` with an HTTP status code of `401`.
-
----
 """
 
 def solve():

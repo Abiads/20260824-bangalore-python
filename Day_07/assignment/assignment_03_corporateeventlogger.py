@@ -29,8 +29,6 @@ You are developing a secure authentication firewall. The login gateway must log 
 * Calling `process_login_attempt(logger, "admin", False, "8.8.8.8")` prints to console:
   `[CONSOLE] ERROR: CRITICAL: Unauthorized admin access attempt from IP 8.8.8.8!`
   And writes to log file: `[<timestamp>] [ERROR] - CRITICAL: Unauthorized admin access attempt from IP 8.8.8.8!`
-
----
 """
 
 def solve():

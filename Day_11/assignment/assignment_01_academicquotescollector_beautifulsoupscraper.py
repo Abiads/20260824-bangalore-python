@@ -27,8 +27,6 @@ total_quotes = scrape_academic_quotes("https://quotes.toscrape.com/", "scraped_q
 print(f"Scraped {total_quotes} quotes.")
 # Check your local folder for a file named "scraped_quotes.txt" containing 10 lines.
 ```
-
----
 """
 
 def solve():

@@ -18,8 +18,6 @@ Write a function `generate_employee_monthly_pivot(df)`:
    - **Values**: Sum of `"total_item_revenue"`
    - Set the pivot table's aggregation function to `"sum"`. Fill any empty pivot intersections (`NaN`) with the value `0.0`.
 6. **Return**: The resulting pivot table DataFrame.
-
----
 """
 
 def solve():

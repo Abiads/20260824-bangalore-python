@@ -34,8 +34,6 @@ print(subtotals)    # Output: [ 30. 100. 100. 100. 100.]
 print(final_prices) # Output: [30. 90. 100. 95. 80.]
 print(total)        # Output: 395.0
 ```
-
----
 """
 
 def solve():

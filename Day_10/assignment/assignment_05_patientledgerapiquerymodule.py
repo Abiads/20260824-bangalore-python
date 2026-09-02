@@ -27,8 +27,6 @@ Implement a Flask application connected to a local SQLite database named `clinic
    - **Execution**: Insert the new record into `clinic.db` using a parameterized SQL query. Commit changes.
    - **Response**: Return a success JSON payload: `{"status": "Created", "message": "Patient record added successfully."}` with an HTTP status code of `201`.
 4. Ensure all database connections and cursors are closed cleanly inside your route handlers.
-
----
 """
 
 def solve():

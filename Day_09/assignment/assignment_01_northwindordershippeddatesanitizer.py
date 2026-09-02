@@ -31,8 +31,6 @@ clean_df = sanitize_order_dates(df)
 print("Null dates after:", clean_df["shipped_date"].isna().sum())
 print(clean_df[clean_df["shipped_date"].str.startswith("In-Transit")][["ship_country", "shipped_date"]].head(2))
 ```
-
----
 """
 
 def solve():

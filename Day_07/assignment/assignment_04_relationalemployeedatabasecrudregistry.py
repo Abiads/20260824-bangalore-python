@@ -49,10 +49,6 @@ print(success) # Output: True
 # 4. Attempt update on non-existent ID
 print(db.update_salary(999, 100.0)) # Output: False
 ```
-
----
-
-## Difficult Assignments
 """
 
 def solve():

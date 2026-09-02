@@ -15,10 +15,6 @@ Write a function `generate_product_sales_bubble(df, output_html_path)`:
      - Set the hover overlay name label (`hover_name` parameter) to `"product_name"`.
      - Add the title: `"Product Sales Analysis: Price, Quantity & Revenue"`.
 3. **Save**: Save the interactive chart as a standalone HTML file to `output_html_path` using `fig.write_html()`.
-
----
-
-## Difficult Assignments
 """
 
 def solve():

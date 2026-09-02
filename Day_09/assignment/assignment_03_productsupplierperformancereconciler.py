@@ -32,8 +32,6 @@ print(summary_df.head(3))
 # Bigfoot Breweries                26335.50             940
 # Cooperativa de Quesos...         21980.20             800
 ```
-
----
 """
 
 def solve():

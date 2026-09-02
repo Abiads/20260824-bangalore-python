@@ -27,8 +27,6 @@ invalid_dates = calculate_backup_dates("28/08/2026", 10)
 # Console output: Invalid date format. Expected YYYY-MM-DD.
 print(invalid_dates) # Output: None
 ```
-
----
 """
 
 def solve():

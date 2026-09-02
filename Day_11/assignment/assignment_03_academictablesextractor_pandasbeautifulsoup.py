@@ -27,8 +27,6 @@ try:
 except ValueError as e:
     print(e)
 ```
-
----
 """
 
 def solve():

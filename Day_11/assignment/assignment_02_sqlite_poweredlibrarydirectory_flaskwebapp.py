@@ -28,10 +28,6 @@ Implement a complete Flask web application connected to a local SQLite database 
 3. Ensure cursors and database connections are closed cleanly inside each route handler.
 
 *Note: Define the Flask app instance variable as `app`.*
-
----
-
-## Medium Assignments
 """
 
 def solve():

@@ -24,8 +24,6 @@ print(count)      # Output: 6  (values 40, 35, 40, 40, 40, 30 are capped)
 print(grid.shape) # Output: (6, 4)
 print(col_avgs)   # Output: 1D array of 4 average values (axis 0)
 ```
-
----
 """
 
 def solve():
