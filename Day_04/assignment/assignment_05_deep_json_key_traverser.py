@@ -70,14 +70,14 @@ if __name__ == "__main__":
         "database": "postgresql://localhost:5432"
     }
     
-    # Test valid path
+  
     cert = traverse_nested_config(app_config, "server.ssl.cert_path")
     print("Found SSL Cert Path:", cert)
     
-    # Test non-existent key with default fallback
+
     user = traverse_nested_config(app_config, "server.database.username", "guest")
     print("Fallback User:", user)
     
-    # Test type error path (indexing into string) with default fallback
+   
     db_host = traverse_nested_config(app_config, "database.host", "localhost")
     print("Fallback DB Host:", db_host)

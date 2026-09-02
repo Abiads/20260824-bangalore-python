@@ -64,7 +64,7 @@ def manage_bookstore_inventory(inventory, action, book_title, quantity=0):
     elif action == "sell":
         if book_title in inventory:
             inventory[book_title] -= quantity
-            if inventory[book_title] == 0:
+            if inventory[book_title] <= 0:
                 del inventory[book_title]
         else:
             print(f"Error: Book '{book_title}' not found in inventory.")
@@ -78,9 +78,11 @@ if __name__ == "__main__":
     print("Initial:", inventory)
     
     # Test your function
+    
+    inventory = manage_bookstore_inventory(inventory, "add", "Abhay Gupta", 5)
     inventory = manage_bookstore_inventory(inventory, "add", "Python Basics", 5)
     print("After Add",inventory)
-    inventory = manage_bookstore_inventory(inventory, "sell", "Python Basics", 2)
+    inventory = manage_bookstore_inventory(inventory, "sell", "Python Basics", 11)
     print("After Sell:", inventory)
 
 

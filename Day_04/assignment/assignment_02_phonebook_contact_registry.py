@@ -54,9 +54,10 @@ def register_contact(contacts, name, phone_input):
 contacts = {}
 
 
+
 contacts = register_contact(contacts, "Alice", "0987654321")
-
-
+contacts = register_contact(contacts, "Alice", "9851284512")
+print(contacts)
 
 try:
     contacts = register_contact(contacts, "Bob", "123-456-789")
