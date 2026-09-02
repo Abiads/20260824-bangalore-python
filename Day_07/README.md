@@ -1,368 +1,278 @@
-# Day 7: File Handling, Data Formats, Serialization & Relational Databases
+# Day 7: Libraries, Debugging, Logging & Databases
 
-Welcome to Day 7! Today we explore the mechanisms Python uses to persist, format, serialize, and query data. Rather than just memorizing boilerplate scripts, we will focus on understanding the **core functions, method signatures, parameter mechanics, and architectural concepts** that power Python's file I/O, structured format parsers, object serialization, and relational database drivers.
-
----
-
-## Table of Contents
-1. [Part 1: File I/O Streams & Context Managers](#part-1-file-io-streams--context-managers)
-2. [Part 2: Structured Tabular Formats (`csv` Module)](#part-2-structured-tabular-formats-csv-module)
-3. [Part 3: Hierarchical Serialization (`json` Module)](#part-3-hierarchical-serialization-json-module)
-4. [Part 4: Object Serialization & Binary Persistence (`pickle` Module)](#part-4-object-serialization--binary-persistence-pickle-module)
-5. [Part 5: Relational Databases & SQLite (Python DB-API 2.0 / `sqlite3`)](#part-5-relational-databases--sqlite-python-db-api-20--sqlite3)
+Welcome to Day 7! Today we cover utility components required for production Python development:
+1. **Python Standard Libraries**: Working with `os`, `sys`, `pathlib`, `datetime`, and `json`.
+2. **Diagnostic Logging**: Configuring logging levels, handlers, and formats to record program telemetry.
+3. **Interactive Debugging**: Using the Python Debugger (`pdb`) to trace variable states and execution lines.
+4. **Relational Databases & DB-API**: Querying databases using `sqlite3` and utilizing parameterized inputs to prevent SQL injections.
 
 ---
 
-## Part 1: File I/O Streams & Context Managers
+## Part 1: Python Standard Libraries
 
-### 1. The File Stream Architecture
-When Python interacts with a file on disk, it does not directly manipulate the storage hardware. Instead, the Operating System allocates an **I/O Stream** and a **File Descriptor** (an integer handle in the OS kernel table). Python wraps this descriptor in a high-level file object that maintains:
-* A **Stream Position Pointer** (cursor offset indicating where the next byte/character will be read or written).
-* An **Internal I/O Buffer** (reducing expensive physical disk writes by batching data in memory).
-* A **Character Encoding Decoder** (e.g., UTF-8 translation between raw bytes and Python `str` Unicode codepoints).
+Python is famous for its "batteries included" philosophy, providing a rich set of built-in modules.
 
----
-
-### 2. Main Functions & Methods in File I/O
-
-#### The `open()` Constructor Function
-```python
-file_object = open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None)
-```
-* **`file`**: String path (or `pathlib.Path`) to the target file.
-* **`mode`**: Access mode specifying stream permissions and pointer placement:
-  * `'r'` (*Read*): Opens existing file for reading from byte offset `0`. Raises `FileNotFoundError` if absent.
-  * `'w'` (*Write*): Opens for writing. Truncates (erases) file to 0 bytes if it exists, or creates a new file.
-  * `'a'` (*Append*): Opens for writing with stream pointer at the end of the file. Preserves existing data.
-  * `'r+'` (*Read & Write*): Opens existing file for both reading and writing without automatic truncation.
-  * `'b'` (*Binary Mode*): Disables automatic Unicode encoding/decoding, returning raw `bytes` (e.g. `'rb'`, `'wb'`).
-* **`encoding`**: Character encoding standard. **Always specify `encoding="utf-8"`** to ensure cross-platform consistency between macOS, Linux, and Windows.
-* **`newline`**: Controls universal newline translation (`\n` vs `\r\n`). When writing CSVs, setting `newline=''` is mandatory to prevent blank lines on Windows.
-
----
-
-#### Core Stream Reading Methods
-
-| Method | Signature | Return Type | Operational Behavior |
-| :--- | :--- | :--- | :--- |
-| **`read()`** | `f.read(size=-1)` | `str` / `bytes` | Reads the entire file content into a single string (or up to `size` characters/bytes if specified). |
-| **`readline()`** | `f.readline(size=-1)` | `str` / `bytes` | Reads the next single line up to the newline character `\n`. Returns `""` (empty string) upon reaching EOF (End of File). |
-| **`readlines()`** | `f.readlines(hint=-1)` | `list[str]` | Reads all remaining lines and returns them as a list of strings. |
-| **Direct Iteration** | `for line in f:` | Generator `str` | **Best Practice**: Streams lines lazily into memory one line at a time. Ideal for massive (multi-gigabyte) files. |
-
----
-
-#### Core Stream Writing & Positioning Methods
-
-* **`f.write(string)`**: Writes a string to the stream buffer and returns the integer count of characters written. It does **not** append an automatic newline (`\n`).
-* **`f.writelines(iterable)`**: Writes a sequence of strings (e.g., a list of lines) to the stream. Does not add line separators.
-* **`f.tell()`**: Returns the current integer byte offset of the stream cursor.
-* **`f.seek(offset, whence=0)`**: Moves the stream cursor to a new position:
-  * `whence=0` (*default*): Absolute offset from the beginning of the file.
-  * `whence=1`: Relative offset from the current stream position.
-  * `whence=2`: Relative offset from the end of the file (typically used with negative offsets in binary mode).
-* **`f.flush()`**: Forces immediate flushing of the internal Python write buffer to the OS disk buffer without closing the stream.
-* **`f.close()`**: Flushes buffers and releases the operating system file descriptor handle.
-
----
-
-### 3. Context Managers & The `with` Statement Protocol
-Manual file handling requires explicit `try...finally` blocks to ensure `f.close()` executes even during runtime crashes. The `with` statement utilizes Python's Context Manager protocol:
-* Upon entering the block, Python executes `f.__enter__()`, returning the file object.
-* Upon exiting the block (normally or via an unhandled exception), Python automatically invokes `f.__exit__(exc_type, exc_val, exc_tb)`, guaranteeing that the stream closes immediately.
+### 1. Modern Paths with `pathlib`
+The `pathlib` module offers an object-oriented approach to interacting with filesystem paths across different operating systems.
 
 ```python
-# Concise Context-Managed File Operations
-with open("system_log.txt", "w", encoding="utf-8") as f:
-    f.write("Line 1: System Boot\nLine 2: Ready\n")
+from pathlib import Path
 
-# Reading lazily line by line
-with open("system_log.txt", "r", encoding="utf-8") as f:
-    for line in f:
-        print("Log Entry:", line.strip())
+# Create a path object representing the current working directory
+current_dir = Path(".")
+
+# Joins paths using the slash operator (/)
+target_file = current_dir / "Day_07" / "Assignment.md"
+
+# Checking properties
+print("Exists:", target_file.exists())
+print("Is File:", target_file.is_file())
+print("Filename:", target_file.name)
+print("Parent directory:", target_file.parent)
 ```
 
----
-
-## Part 2: Structured Tabular Formats (`csv` Module)
-
-The standard `csv` module parses delimited tabular text files without requiring manual `.split(",")` operations, properly handling quoted fields, commas inside text, and escaped newlines.
-
-### 1. Main Functions & Classes in `csv`
-
-#### A. Positional Row Processing: `csv.reader` & `csv.writer`
-* **`csv.reader(csvfile, dialect='excel', **fmtparams)`**:
-  * Returns an iterator that parses each line into a **list of strings**.
-  * Key parameters: `delimiter=','` (column separator), `quotechar='"'` (quoting character).
-* **`csv.writer(csvfile, dialect='excel', **fmtparams)`**:
-  * Returns a writer object responsible for converting sequences into delimited strings.
-  * **`writer.writerow(row_sequence)`**: Writes a single row list/tuple.
-  * **`writer.writerows(list_of_rows)`**: Writes multiple rows in batch.
-
-#### B. Dictionary-Based Column Mapping: `csv.DictReader` & `csv.DictWriter`
-* **`csv.DictReader(f, fieldnames=None, restkey=None, restval=None)`**:
-  * Reads tabular data directly into Python dictionaries (`dict`).
-  * If `fieldnames` is omitted, the first row of the CSV is automatically consumed as dictionary keys.
-  * Each subsequent row maps column headers to corresponding row string values.
-* **`csv.DictWriter(f, fieldnames, restval='', extrasaction='raise')`**:
-  * Writes dictionary mappings into CSV rows based on the prescribed `fieldnames` list.
-  * **`writer.writeheader()`**: Writes the header row containing the keys listed in `fieldnames`.
-  * **`writer.writerow(row_dict)`**: Writes a dictionary where keys match `fieldnames`.
+### 2. Dates and Times with `datetime`
+The `datetime` module handles date arithmetic and formatting.
 
 ```python
-import csv
+from datetime import datetime, timedelta
 
-# Writing CSV via DictWriter
-records = [{"id": 1, "product": "Chai", "price": 18.0}, {"id": 2, "product": "Chang", "price": 19.0}]
-with open("products.csv", "w", newline="", encoding="utf-8") as f:
-    writer = csv.DictWriter(f, fieldnames=["id", "product", "price"])
-    writer.writeheader()
-    writer.writerows(records)
+# Current time
+now = datetime.now()
+print("Now:", now.isoformat())
 
-# Reading CSV via DictReader
-with open("products.csv", "r", encoding="utf-8") as f:
-    for row in csv.DictReader(f):
-        print(f"Product: {row['product']} | Price: ${float(row['price']):.2f}")
+# Creating specific dates
+target_date = datetime(2026, 8, 28)
+
+# Date calculations using timedelta
+two_weeks_later = target_date + timedelta(days=14)
+print("Two Weeks Later:", two_weeks_later.strftime("%d-%b-%Y"))  # Output: 11-Sep-2026
+
+# Parsing strings to datetime (strptime)
+parsed_date = datetime.strptime("2026-08-28", "%Y-%m-%d")
+print("Parsed Date Month:", parsed_date.month)
 ```
 
----
-
-## Part 3: Hierarchical Serialization (`json` Module)
-
-**JSON (JavaScript Object Notation)** is a lightweight, human-readable text format for hierarchical data exchange. Python’s standard `json` module translates between JSON types and Python native types.
-
-### 1. Data Type Mapping
-
-| JSON Data Type | Python Native Equivalent |
-| :--- | :--- |
-| `object` (`{"key": "value"}`) | `dict` |
-| `array` (`[1, 2, 3]`) | `list` |
-| `string` (`"hello"`) | `str` |
-| `number (int / real)` | `int` / `float` |
-| `boolean` (`true` / `false`) | `bool` (`True` / `False`) |
-| `null` | `None` |
-
----
-
-### 2. The Four Core JSON Functions Matrix
-
-The `json` module is built around **four fundamental functions**, divided into **string conversions** (functions ending in `s`) and **file stream conversions**:
-
-```
-                  ┌───────────────────────────────┐
-                  │    In-Memory Python Object    │
-                  └───────┬───────────────▲───────┘
-                          │               │
-            json.dumps()  │               │  json.loads()
-      (Serialize to str)  │               │  (Deserialize from str)
-                          ▼               │
-                  ┌───────────────────────────────┐
-                  │      JSON-Formatted String    │
-                  └───────────────────────────────┘
-
-                  ┌───────────────────────────────┐
-                  │    In-Memory Python Object    │
-                  └───────┬───────────────▲───────┘
-                          │               │
-             json.dump()  │               │  json.load()
-     (Serialize to stream)│               │  (Deserialize from stream)
-                          ▼               │
-                  ┌───────────────────────────────┐
-                  │     File Stream on Disk       │
-                  └───────────────────────────────┘
-```
-
-#### Function 1: `json.dumps(obj, *, indent=None, sort_keys=False, default=None)`
-* **Purpose**: Serializes in-memory Python object `obj` into a formatted JSON **string** (`str`).
-* **`indent`**: Integer indentation level for human-readable pretty-printing (e.g. `indent=4`).
-* **`sort_keys`**: If `True`, sorts dictionary keys alphabetically.
-* **`default`**: A fallback callable for encoding custom objects that are not natively serializable.
-
-#### Function 2: `json.loads(s, *, parse_float=None, parse_int=None)`
-* **Purpose**: Deserializes a JSON **string** `s` back into native Python dictionaries/lists.
-* Raises `json.JSONDecodeError` if the string contains malformed JSON syntax.
-
-#### Function 3: `json.dump(obj, fp, *, indent=None, sort_keys=False)`
-* **Purpose**: Serializes Python object `obj` and writes it directly to an open text file stream `fp`.
-
-#### Function 4: `json.load(fp)`
-* **Purpose**: Reads directly from an open text file stream `fp` and parses JSON into a Python data structure.
+### 3. Serialization with `json`
+The `json` module translates Python dictionaries and lists to JSON strings (serialization) and back (deserialization).
 
 ```python
 import json
 
-payload = {"order_id": 10248, "customer": "VINET", "items": [{"id": 11, "qty": 12}]}
+config = {"host": "localhost", "port": 8080, "debug": True}
 
-# 1. To String (dumps) & From String (loads)
-json_str = json.dumps(payload, indent=2)
-restored_obj = json.loads(json_str)
+# Serialize: Python dict -> JSON string
+json_str = json.dumps(config, indent=4)
+print(json_str)
 
-# 2. To File (dump) & From File (load)
-with open("order.json", "w", encoding="utf-8") as f:
-    json.dump(payload, f, indent=4)
-
-with open("order.json", "r", encoding="utf-8") as f:
-    data_from_file = json.load(f)
+# Deserialize: JSON string -> Python dict
+parsed_config = json.loads(json_str)
+print("Parsed port:", parsed_config["port"])
 ```
 
 ---
 
-## Part 4: Object Serialization & Binary Persistence (`pickle` Module)
+## Part 2: Diagnostic Logging
 
-### 1. What is Pickling?
-While JSON only represents generic data types (strings, numbers, lists, dictionaries), Python applications often need to persist **exact in-memory Python objects**—including custom class instances, function references, and recursive data structures.
+Instead of using `print()` statements—which output to standard console channels and are hard to filter—production applications use Python's built-in `logging` module.
 
-**Pickling** (*Object Serialization*) converts a Python object hierarchy into a byte stream (`bytes`), which can be stored on disk or transmitted over a network. **Unpickling** reconstructs the exact Python object back in memory.
+### 1. Logging Levels
+Log levels classify events based on severity:
+* `DEBUG`: Detailed diagnostic information (primarily for troubleshooting).
+* `INFO`: Confirmation that things are working as expected.
+* `WARNING`: Indication that something unexpected happened (default threshold).
+* `ERROR`: A serious issue that prevented a specific function from executing.
+* `CRITICAL`: A severe error indicating the program itself may be unable to continue.
 
----
-
-### 2. The Four Core Pickle Functions Matrix
-
-Similar to `json`, the `pickle` module provides two string/byte functions and two stream functions:
-
-| Function | Input | Output | Operational Behavior |
-| :--- | :--- | :--- | :--- |
-| **`pickle.dumps(obj)`** | Python object | `bytes` object | Serializes object into an in-memory binary byte stream. |
-| **`pickle.loads(bytes_data)`** | `bytes` object | Python object | Deserializes an in-memory byte buffer back into a live Python object. |
-| **`pickle.dump(obj, file)`** | Object + File stream | None (writes to disk) | Serializes object directly to an open binary file (`'wb'`). |
-| **`pickle.load(file)`** | Binary file stream | Python object | Reads byte stream from binary file (`'rb'`) and reconstructs the object. |
+### 2. Configuring Handlers and Formatters
+You can configure log messages to output to the console, write to files, or be formatted with metadata (timestamps, file names, line numbers).
 
 ```python
-import pickle
+import logging
 
-class ProductCatalog:
-    def __init__(self, category):
-        self.category = category
-        self.items = []
+# Create a custom logger
+logger = logging.getLogger("CDAC_App")
+logger.setLevel(logging.DEBUG)  # Set the lowest threshold level to capture
 
-    def add_product(self, name, price):
-        self.items.append({"name": name, "price": price})
+# Create Handlers
+console_handler = logging.StreamHandler()
+file_handler = logging.FileHandler("app.log")
 
-catalog = ProductCatalog("Beverages")
-catalog.add_product("Chai", 18.0)
+# Set thresholds for individual handlers
+console_handler.setLevel(logging.INFO)
+file_handler.setLevel(logging.WARNING)
 
-# Save live class instance to binary file (dump)
-with open("catalog.pkl", "wb") as f:
-    pickle.dump(catalog, f)
+# Create Formatters and link them to handlers
+formatter = logging.Formatter("[%(asctime)s] [%(name)s] [%(levelname)s] - %(message)s")
+console_handler.setFormatter(formatter)
+file_handler.setFormatter(formatter)
 
-# Restore live class instance from binary file (load)
-with open("catalog.pkl", "rb") as f:
-    restored_catalog = pickle.load(f)
+# Add Handlers to the Logger
+logger.addHandler(console_handler)
+logger.addHandler(file_handler)
 
-print(f"Restored Category: {restored_catalog.category} | Items: {restored_catalog.items}")
+# Logging statements
+logger.info("Application starting up...")         # Console only
+logger.warning("Configuration file is missing.")    # Both Console & File
+logger.error("Failed to connect to database.")     # Both Console & File
 ```
 
 ---
 
-### 3. What Can and Cannot Be Pickled?
+## Part 3: Interactive Debugging (`pdb`)
 
-#### Supported Types:
-* Built-in primitives: `None`, booleans, integers, floats, complex numbers, strings, bytes.
-* Built-in containers: `tuples`, `lists`, `sets`, `dictionaries` containing picklable objects.
-* Top-level functions and built-in functions (pickled by name reference).
-* Top-level classes and class instances whose `__dict__` attributes are picklable.
+The **Python Debugger (`pdb`)** provides an interactive debugging environment for Python programs. It allows you to pause execution, inspect variables, and step through code line by line.
 
-#### Unsupported Types:
-* Open OS resources: Active file descriptors, active database connections, network sockets.
-* Execution frames, generators, and running coroutines.
-* Anonymous lambda functions and nested closures.
+### 1. Setting a Breakpoint
+Insert `breakpoint()` (Python 3.7+) or `import pdb; pdb.set_trace()` at the exact line you wish to inspect.
 
+```python
+def calculate_average(grades):
+    total = sum(grades)
+    # Pause execution here
+    breakpoint()
+    count = len(grades)
+    return total / count
+
+calculate_average([85, 90, 78])
+```
+
+### 2. Common `pdb` Commands
+When execution pauses, you will see a command prompt `(Pdb)`. Use these commands:
+* **`n` (next)**: Executes the current line and stops at the next line in the current function.
+* **`s` (step)**: Steps *into* the function called on the current line.
+* **`c` (continue)**: Resumes standard execution until the next breakpoint.
+* **`p <var>` (print)**: Evaluates and prints the value of variable `<var>`.
+* **`l` (list)**: Shows the current line and surrounding lines of source code.
+* **`w` (where)**: Prints the stack trace, showing the nested function calls leading to this line.
+* **`q` (quit)**: Instantly aborts execution and exits the debugger.
+
+---
+
+## Part 4: Relational Databases (`sqlite3`)
+
+Python interacts with SQL database backends using standard drivers compliant with **DB-API 2.0**. For lightweight local storage, Python includes `sqlite3`.
+
+### 1. Parameterized Queries (Preventing SQL Injections)
 > [!CAUTION]
-> **Pickle Security Warning**: The `pickle` format is **not secure against untrusted data**. Pickled streams can encode instructions to execute arbitrary system commands during unpickling via the `__reduce__` method. **Never unpickle untrusted data received over public networks.**
-
----
-
-## Part 5: Relational Databases & SQLite (Python DB-API 2.0 / `sqlite3`)
-
-Python interacts with relational database management systems (RDBMS) via the **PEP 249 Database API Specification v2.0 (DB-API)**. Python includes native SQLite support via the `sqlite3` module.
-
-```
-┌────────────────────────────────────────────────────────┐
-│                   Python Application                   │
-└───────────────────────────┬────────────────────────────┘
-                            │ Calls PEP 249 Methods (connect, execute, commit)
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│                Python DB-API (sqlite3)                 │
-└───────────────────────────┬────────────────────────────┘
-                            │ Manages C-level library calls & memory cursors
-                            ▼
-┌────────────────────────────────────────────────────────┐
-│               Embedded SQLite SQL Engine               │
-│               (Database File / In-Memory)              │
-└────────────────────────────────────────────────────────┘
-```
-
----
-
-### 1. Main Objects & Methods in `sqlite3`
-
-#### Object 1: The Connection Object (`sqlite3.Connection`)
-Created via `sqlite3.connect(database, timeout=5.0, ...)`:
-* **`conn.cursor()`**: Instantiates and returns a new Cursor object to execute SQL commands.
-* **`conn.commit()`**: Commits the current active transaction to disk storage. Required after any `INSERT`, `UPDATE`, or `DELETE`.
-* **`conn.rollback()`**: Aborts the active transaction, reverting all modifications made since the last `commit()`.
-* **`conn.close()`**: Closes the database connection and releases OS locks.
-* **`conn.row_factory`**: Callable to customize row representations (e.g. `sqlite3.Row` allows dictionary-like column name access `row["column_name"]`).
-
----
-
-#### Object 2: The Cursor Object (`sqlite3.Cursor`)
-The cursor acts as a pointer and execution context for running SQL statements and retrieving result sets.
-
-#### Core Execution Methods:
-* **`cursor.execute(sql, parameters)`**:
-  * Prepares and executes a single SQL statement.
-  * **Always use parameter tuples (`?`)** instead of string concatenation.
-  * Example: `cursor.execute("SELECT * FROM orders WHERE freight > ?", (50.0,))`.
-* **`cursor.executemany(sql, seq_of_parameters)`**:
-  * Executes a parameterized SQL command repeatedly against an iterable sequence of parameter tuples (high-speed batch inserts).
-* **`cursor.executescript(sql_script)`**:
-  * Executes multiple raw SQL statements separated by semicolons (e.g., initial table creation scripts).
-
-#### Core Data Retrieval Methods:
-* **`cursor.fetchone()`**: Retrieves the next single row tuple from the query result set, or returns `None` when exhausted.
-* **`cursor.fetchmany(size)`**: Retrieves the next batch of rows as a list of tuples (up to `size` rows).
-* **`cursor.fetchall()`**: Retrieves all remaining rows from the result set as a list of tuples.
-
-#### Core Metadata Attributes:
-* **`cursor.rowcount`**: Returns the number of rows modified, inserted, or deleted by the last SQL execution.
-* **`cursor.lastrowid`**: Returns the integer primary key `id` generated by the most recent `INSERT` operation on an `AUTOINCREMENT` column.
-
----
-
-### 2. Concise DB-API CRUD Workflow & Parameterization
+> Never format or concatenate strings directly into an SQL statement (e.g., `f"INSERT INTO users VALUES ('{user}')"`). Doing so exposes your database to **SQL Injection Attacks**. Always use parameterized placeholder queries.
 
 ```python
 import sqlite3
 
-# 1. Establish Connection & Cursor
-conn = sqlite3.connect("store.db")
-conn.row_factory = sqlite3.Row  # Enables column-name indexing
+# 1. Establish connection to local database file
+conn = sqlite3.connect("database.db")
+
+# 2. Create a cursor object to execute SQL commands
 cursor = conn.cursor()
 
-# 2. DDL: Create Table
-cursor.execute('''
-CREATE TABLE IF NOT EXISTS orders (
-    order_id INTEGER PRIMARY KEY,
-    customer_id TEXT NOT NULL,
-    freight REAL NOT NULL
+# 3. Create a table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL,
+    email TEXT
 )
-''')
+""")
 
-# 3. Batch Parameterized Insert (executemany)
-sample_orders = [(10248, "VINET", 32.38), (10249, "TOMSP", 11.61), (10250, "HANAR", 65.83)]
-cursor.executemany("INSERT OR IGNORE INTO orders VALUES (?, ?, ?)", sample_orders)
+# 4. Insert data using Parameterized SQL (represented by ? placeholders)
+new_user = ("vinod_acts", "vinod@acts.com")
+cursor.execute("INSERT INTO users (username, email) VALUES (?, ?)", new_user)
+
+# 5. Commit transaction changes
 conn.commit()
 
-# 4. Parameterized Query (execute + fetchall)
-cursor.execute("SELECT order_id, customer_id, freight FROM orders WHERE freight > ?", (20.0,))
-for row in cursor.fetchall():
-    print(f"Order #{row['order_id']} | Cust: {row['customer_id']} | Freight: ${row['freight']:.2f}")
+# 6. Retrieve data
+cursor.execute("SELECT * FROM users WHERE username = ?", ("vinod_acts",))
+rows = cursor.fetchall()
+for row in rows:
+    print(f"ID: {row[0]}, Name: {row[1]}, Email: {row[2]}")
 
-# 5. Clean up
+# 7. Close resources safely
+cursor.close()
 conn.close()
 ```
 
-> [!IMPORTANT]
-> **Preventing SQL Injection**: Never format SQL queries with Python string formatting (e.g., `f"SELECT * FROM users WHERE name = '{user_input}'"`). Attackers can pass malicious payloads like `' OR '1'='1` to bypass security. **Always pass data as a separate tuple using `?` placeholders.**
+---
+
+## Practical Examples (Interactive & Runnable)
+
+### Example 1: JSON File Configuration Loader
+Demonstrates `pathlib`, `json`, and exception safety.
+
+```python
+import json
+from pathlib import Path
+
+def load_system_config(filepath):
+    config_path = Path(filepath)
+    
+    # 1. Check file existence
+    if not config_path.exists():
+        print(f"Warning: '{filepath}' not found. Loading defaults.")
+        return {"env": "prod", "cache": True, "limit": 100}
+        
+    # 2. Attempt to parse JSON contents
+    try:
+        with open(config_path, "r") as file:
+            return json.load(file)
+    except json.JSONDecodeError as err:
+        print(f"Corrupted config JSON: {err}. Reverting to safety parameters.")
+        return {"env": "error-state", "cache": False, "limit": 10}
+
+# Write a dummy config file to test
+Path("settings.json").write_text('{"env": "development", "cache": false, "limit": 50}')
+
+# Load configuration
+settings = load_system_config("settings.json")
+print("Settings:", settings)
+```
+
+### Example 2: SQLite database Transaction with Rollback
+Demonstrates transaction management with commit and rollback.
+
+```python
+import sqlite3
+
+def init_bank_db():
+    conn = sqlite3.connect("bank.db")
+    cursor = conn.cursor()
+    cursor.execute("CREATE TABLE IF NOT EXISTS accounts (acc_num TEXT PRIMARY KEY, balance REAL)")
+    cursor.execute("INSERT OR REPLACE INTO accounts VALUES ('ACC01', 500.0)")
+    cursor.execute("INSERT OR REPLACE INTO accounts VALUES ('ACC02', 200.0)")
+    conn.commit()
+    conn.close()
+
+def transfer_funds(sender, receiver, amount):
+    conn = sqlite3.connect("bank.db")
+    cursor = conn.cursor()
+    
+    try:
+        # Deduct from sender
+        cursor.execute("UPDATE accounts SET balance = balance - ? WHERE acc_num = ?", (amount, sender))
+        
+        # Verify sender balance isn't negative (simulate business logic error)
+        cursor.execute("SELECT balance FROM accounts WHERE acc_num = ?", (sender,))
+        sender_balance = cursor.fetchone()[0]
+        if sender_balance < 0:
+            raise ValueError(f"Insufficient funds in sender account: {sender}.")
+            
+        # Add to receiver
+        cursor.execute("UPDATE accounts SET balance = balance + ? WHERE acc_num = ?", (amount, receiver))
+        
+    except Exception as e:
+        # Roll back all database operations executed in the try block
+        print(f"Transaction failed: {e}. Rolling back changes.")
+        conn.rollback()
+    else:
+        # Commit changes if all operations succeeded
+        print("Transaction successful! Committing balances.")
+        conn.commit()
+    finally:
+        conn.close()
+
+# Run Setup and Execution
+init_bank_db()
+transfer_funds("ACC01", "ACC02", 150.0)  # Succeeded
+transfer_funds("ACC01", "ACC02", 1000.0) # Fails and rolls back
+```
