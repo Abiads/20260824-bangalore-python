@@ -20,12 +20,16 @@ Expected output: ['apple', 'banana', 'orange']
 # TODO: Check if item is not already in cleaned_cart
 # TODO: If not present, append it
 # TODO: Print cleaned cart
-
-
 def main():
-    ...
-    
+    cart = ["apple", "banana", "apple", "orange", "banana", "banana"]
 
+    cleaned_cart = []
+
+    for item in cart:
+        if item not in cleaned_cart:
+            cleaned_cart.append(item)
+
+    print(cleaned_cart)
 
 if __name__== "__main__":
     main()
