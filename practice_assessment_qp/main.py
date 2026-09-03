@@ -9,6 +9,7 @@ products = [
 
 next_id = 6  # Tracks the next auto-generated product ID
 
+#-------------------------------------------------------------------------------------
 
 def get_non_empty_string(prompt):
     """Prompts until a non-empty string is provided."""
@@ -18,6 +19,7 @@ def get_non_empty_string(prompt):
             return value
         print("Error: Input cannot be empty. Please re-enter.")
 
+#-------------------------------------------------------------------------------------
 
 def get_positive_float(prompt):
     """Prompts until a valid float greater than 0 is entered."""
@@ -30,6 +32,7 @@ def get_positive_float(prompt):
         except ValueError:
             print("Error: Invalid numeric input. Please enter a valid price.")
 
+#-------------------------------------------------------------------------------------
 
 def get_non_negative_int(prompt):
     """Prompts until a valid integer >= 0 is entered."""
@@ -42,6 +45,7 @@ def get_non_negative_int(prompt):
         except ValueError:
             print("Error: Invalid integer input. Please enter a whole number.")
 
+#-------------------------------------------------------------------------------------
 
 def display_table(product_list):
     """Helper function to print products in a neat tabular format."""
@@ -52,6 +56,7 @@ def display_table(product_list):
         print(f"{p['id']:<5} | {p['name']:<18} | {p['category']:<15} | {p['price']:<10.2f} | {p['quantity']:<6}")
     print(f"{'-'*65}")
 
+#-------------------------------------------------------------------------------------
 
 def add_product():
     """Adds a new product with auto-generated ID."""
@@ -73,6 +78,7 @@ def add_product():
     print(f"Success: Product '{name}' added with ID: {next_id}")
     next_id += 1
 
+#-------------------------------------------------------------------------------------
 
 def view_all_products():
     """Displays all products in the inventory."""
@@ -82,6 +88,7 @@ def view_all_products():
         return
     display_table(products)
 
+#-------------------------------------------------------------------------------------
 
 def search_product():
     """Searches products by Product ID or Name."""
@@ -109,6 +116,7 @@ def search_product():
     else:
         print("No matching products found.")
 
+#-------------------------------------------------------------------------------------
 
 def update_product():
     """Updates product attributes using product ID."""
@@ -167,6 +175,7 @@ def update_product():
 
     print(f"Success: Product ID {prod_id} updated successfully.")
 
+#-------------------------------------------------------------------------------------
 
 def delete_product():
     """Deletes a product by product ID."""
@@ -185,6 +194,7 @@ def delete_product():
 
     print(f"Product with ID {prod_id} not found.")
 
+#-------------------------------------------------------------------------------------
 
 def main():
     """Main menu loop."""
@@ -218,6 +228,7 @@ def main():
         else:
             print("Invalid selection. Please choose an option between 1 and 6.")
 
+#-------------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     main()
