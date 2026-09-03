@@ -29,6 +29,11 @@ This repository contains the complete curriculum, class workspaces, notes, datas
 * **[training_plan.md](./training_plan.md)** / **[training_plan.pdf](./training_plan.pdf)**: Complete course syllabus schedule.
 * **[Northwind_Orders.csv](./Northwind_Orders.csv)**: Relational order dataset for Data Science & Pandas modules.
 * **[shared_drive.txt](./shared_drive.txt)**: Shared course drive reference link.
+* **Practice Assessment Modules ([`practice_assessment_qp/`](./practice_assessment_qp/))**:
+  * [Product Inventory Management System](./practice_assessment_qp/product_inventory_management.py)
+  * [Library Book Management System](./practice_assessment_qp/library_book_management.py)
+  * [Student Grade Management System](./practice_assessment_qp/student_grade_management.py)
+
 
 ---
 
