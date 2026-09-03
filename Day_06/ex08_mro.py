@@ -15,7 +15,7 @@ class C(A):
         print("Process C")
         super().process()
 
-class D(B, C):
+class D(A, C):
     def process(self):
         print("Process D")
         super().process()
