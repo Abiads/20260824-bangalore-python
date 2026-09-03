@@ -1,0 +1,2 @@
+[SUCCESS] Batch completed. 2 transaction(s) processed.
+[ROLLBACK] Batch aborted: argument of type 'NoneType' is not iterable

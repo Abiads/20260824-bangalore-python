@@ -11,6 +11,7 @@ with sqlite3.connect(filename) as conn:
         dept = input('Department: ')
         salary = input('Salary    : ')
 
+        print(sql_cmd)
         cur.execute(sql_cmd, (name, dept, salary))
         ans = input("Do you wish to add one more? yes/no [NO] ")
 
