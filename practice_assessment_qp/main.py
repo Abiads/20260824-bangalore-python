@@ -1,175 +1,223 @@
-products = [ 
-    {"id": 1, "name": "Laptop", "category": "Electronics", "price": 55000, "quantity": 10}, 
-    {"id": 3, "name": "Smartphone", "category": "Electronics", "price": 20000, "quantity": 25} ,
-    {"id": 4, "name": "Smartphone", "category": "Electronics", "price": 17800, "quantity": 12} ,
-    {"id": 5, "name": "Smartphone", "category": "Electronics", "price": 31000, "quantity": 3} ,
-    {"id": 2, "name": "Chair", "category": "Furniture", "price": 1500, "quantity": 50} ,
-    {"id": 6, "name": "Smartphone", "category": "Electronics", "price": 200000, "quantity": 2} ,
-] 
+# Initial sample data stored in a list of dictionaries
+products = [
+    {"id": 1, "name": "Laptop", "category": "Electronics", "price": 55000.0, "quantity": 10},
+    {"id": 2, "name": "Smartphone", "category": "Electronics", "price": 20000.0, "quantity": 25},
+    {"id": 3, "name": "Chair", "category": "Furniture", "price": 1500.0, "quantity": 50},
+    {"id": 4, "name": "Notebook", "category": "Stationery", "price": 50.0, "quantity": 200},
+    {"id": 5, "name": "Bottle", "category": "Accessories", "price": 300.0, "quantity": 80}
+]
 
-id_counter = len(products)
+next_id = 6  # Tracks the next auto-generated product ID
 
-#-------------------------------------------------------------------------------------
 
-def menu():
-    menu_text = '''1. Add Product 
-2. View All Products 
-3. Search Product 
-4. Update Product 
-5. Delete Product 
-6. Exit '''
+def get_non_empty_string(prompt):
+    """Prompts until a non-empty string is provided."""
+    while True:
+        value = input(prompt).strip()
+        if value:
+            return value
+        print("Error: Input cannot be empty. Please re-enter.")
 
-    print('**** Product Inventory Management System ****')
-    print(menu_text)
-    try:
-        choice = int(input('Enter your choice: '))
-    except:
-        choice = -1
 
-    return choice
+def get_positive_float(prompt):
+    """Prompts until a valid float greater than 0 is entered."""
+    while True:
+        try:
+            value = float(input(prompt))
+            if value > 0:
+                return value
+            print("Error: Price must be greater than 0.")
+        except ValueError:
+            print("Error: Invalid numeric input. Please enter a valid price.")
 
-#-------------------------------------------------------------------------------------
+
+def get_non_negative_int(prompt):
+    """Prompts until a valid integer >= 0 is entered."""
+    while True:
+        try:
+            value = int(input(prompt))
+            if value >= 0:
+                return value
+            print("Error: Quantity must be greater than or equal to 0.")
+        except ValueError:
+            print("Error: Invalid integer input. Please enter a whole number.")
+
+
+def display_table(product_list):
+    """Helper function to print products in a neat tabular format."""
+    print(f"\n{'-'*65}")
+    print(f"{'ID':<5} | {'Name':<18} | {'Category':<15} | {'Price (₹)':<10} | {'Qty':<6}")
+    print(f"{'-'*65}")
+    for p in product_list:
+        print(f"{p['id']:<5} | {p['name']:<18} | {p['category']:<15} | {p['price']:<10.2f} | {p['quantity']:<6}")
+    print(f"{'-'*65}")
 
 
 def add_product():
-    global id_counter
-    try:
-        print('**** Add new product details ****')
-        name = input('Name: ').strip()
-        if name == '':
-            print('Name cannot be empty!')
-            return
-        
-        category = input('Category: ').strip()
-        if category == '':
-            print('Category cannot be empty!')
-            return
-        
-        price = float(input('Price: '))
-        if price <= 0:
-            print('Price must be > 0')
-            return
+    """Adds a new product with auto-generated ID."""
+    global next_id
+    print("\n--- Add Product ---")
+    name = get_non_empty_string("Enter Product Name: ")
+    category = get_non_empty_string("Enter Category: ")
+    price = get_positive_float("Enter Price: ")
+    quantity = get_non_negative_int("Enter Quantity: ")
 
-        quantity = int(input('Quantity: '))
-        if quantity < 0:
-            print('Quantity must be >= 0')
-            return
+    new_item = {
+        "id": next_id,
+        "name": name,
+        "category": category,
+        "price": price,
+        "quantity": quantity
+    }
+    products.append(new_item)
+    print(f"Success: Product '{name}' added with ID: {next_id}")
+    next_id += 1
 
-        products.append(dict(id=id_counter+1, name=name, category=category, price=price, quantity=quantity))
-        id_counter += 1
 
-    except ValueError:
-        print('Please retry with a numerical value')
+def view_all_products():
+    """Displays all products in the inventory."""
+    print("\n--- Inventory Products ---")
+    if not products:
+        print("No products currently available in inventory.")
+        return
+    display_table(products)
 
-#-------------------------------------------------------------------------------------
-
-def print_one_product(p):
-    pid, name, category, price, quantity = p.values()
-    print('---- Product Details ----')
-    print(f'ID          : {pid}')
-    print(f'Name        : {name}')
-    print(f'Category    : {category}')
-    print(f'Price       : {price}')
-    print(f'Quantity    : {quantity}')
-    print('-'*50)    
-
-#-------------------------------------------------------------------------------------
-
-def print_many_products(product_list):
-    print('-'*60)
-    print(f'{'ID':^5}{'Name':<20}{'Category':<20}{'Price':>10}{'Qty':>5}')
-    print('-'*60)
-    for p in product_list:
-        pid, name, category, price, quantity = p.values()
-        print(f'{pid:^5}{name:<20}{category:<20}{price:>10.2f}{quantity:>5}')
-    print('-'*60)
-
-#-------------------------------------------------------------------------------------
-
-def view_products():
-    if len(products) == 0:
-        print("No products in the inventory. Please add first.")
-    elif len(products) == 1:
-        print_one_product(products[0])
-    else:
-        print_many_products(products)
-
-#-------------------------------------------------------------------------------------
 
 def search_product():
-    try:
-        print('1. Search by id')
-        print('2. Search by name')
-        choice = int(input('Enter your choice: '))
+    """Searches products by Product ID or Name."""
+    print("\n--- Search Product ---")
+    print("1. Search by ID")
+    print("2. Search by Name")
+    choice = input("Enter choice (1/2): ").strip()
 
-        if choice == 1:
-            pid = int(input('Enter the id of the product to search: '))
-            search_product_by_id(pid)
-        elif choice == 2:
-            search_product_by_name()
-        else:
-            print('Invalid choice. Please try again.')
-    except:
-        print('Please try again with an integer input.')
-
-#-------------------------------------------------------------------------------------
-def search_product_by_id(pid):
-    result = [p for p in products if p['id']==pid]
-    if not result:
-        print(f'No product found for id {pid}')
-        return None
-
-    print_one_product(result[0])
-    return result[0]
-#-------------------------------------------------------------------------------------
-def search_product_by_name():
-    name = input('Enter the name of the product to search: ')
-    result = [p for p in products if p['name']==name]
-    if not result:
-        print(f'No product found for name "{name}"')
+    if choice == "1":
+        try:
+            search_id = int(input("Enter Product ID to search: "))
+            matches = [p for p in products if p["id"] == search_id]
+        except ValueError:
+            print("Error: ID must be an integer.")
+            return
+    elif choice == "2":
+        search_name = input("Enter Product Name to search: ").strip().lower()
+        matches = [p for p in products if search_name in p["name"].lower()]
+    else:
+        print("Invalid search choice.")
         return
 
-    if len(result) == 1:
-        print_one_product(result[0])
+    if matches:
+        display_table(matches)
     else:
-        print_many_products(result)
-#-------------------------------------------------------------------------------------
-def delete_product():
+        print("No matching products found.")
+
+
+def update_product():
+    """Updates product attributes using product ID."""
+    print("\n--- Update Product ---")
     try:
-        pid = int(input('Enter id of the product to delete: '))
-        p = search_product_by_id(pid)
-        if p is None:
+        prod_id = int(input("Enter Product ID to update: "))
+    except ValueError:
+        print("Error: Product ID must be an integer.")
+        return
+
+    target = next((p for p in products if p["id"] == prod_id), None)
+    if not target:
+        print(f"Product with ID {prod_id} not found.")
+        return
+
+    print(f"Updating Product: {target['name']} (ID: {target['id']})")
+    print("(Press Enter directly to keep the existing value)")
+
+    # Name update
+    new_name = input(f"Enter new Name [{target['name']}]: ").strip()
+    if new_name:
+        target["name"] = new_name
+
+    # Category update
+    new_cat = input(f"Enter new Category [{target['category']}]: ").strip()
+    if new_cat:
+        target["category"] = new_cat
+
+    # Price update
+    price_input = input(f"Enter new Price [{target['price']}]: ").strip()
+    if price_input:
+        while True:
+            try:
+                val = float(price_input)
+                if val > 0:
+                    target["price"] = val
+                    break
+                print("Price must be > 0.")
+            except ValueError:
+                print("Invalid number.")
+            price_input = input("Re-enter valid Price: ").strip()
+
+    # Quantity update
+    qty_input = input(f"Enter new Quantity [{target['quantity']}]: ").strip()
+    if qty_input:
+        while True:
+            try:
+                val = int(qty_input)
+                if val >= 0:
+                    target["quantity"] = val
+                    break
+                print("Quantity must be >= 0.")
+            except ValueError:
+                print("Invalid integer.")
+            qty_input = input("Re-enter valid Quantity: ").strip()
+
+    print(f"Success: Product ID {prod_id} updated successfully.")
+
+
+def delete_product():
+    """Deletes a product by product ID."""
+    print("\n--- Delete Product ---")
+    try:
+        prod_id = int(input("Enter Product ID to delete: "))
+    except ValueError:
+        print("Error: Product ID must be an integer.")
+        return
+
+    for i, p in enumerate(products):
+        if p["id"] == prod_id:
+            deleted_item = products.pop(i)
+            print(f"Success: Product '{deleted_item['name']}' (ID: {prod_id}) removed.")
             return
 
-        ans = input('Are you sure to delete this product? (y/n): ').lower()
+    print(f"Product with ID {prod_id} not found.")
 
-        if ans == 'y':
-            products.remove(p)
-            print('Product deleted successfully!')
-        
-    except:
-        print('Invalid type of value for product id. Try again with an integer.')
-#-------------------------------------------------------------------------------------
+
 def main():
+    """Main menu loop."""
     while True:
-        choice = menu()
+        print("\n===================================")
+        print(" PRODUCT INVENTORY MANAGEMENT")
+        print("===================================")
+        print("1. Add Product")
+        print("2. View All Products")
+        print("3. Search Product")
+        print("4. Update Product")
+        print("5. Delete Product")
+        print("6. Exit")
+        print("===================================")
 
-        match choice:
-            case 1:
-                add_product()
-            case 2:
-                view_products()
-            case 3:
-                search_product()
-            case 4:
-                ...
-            case 5:
-                delete_product()
-            case 6:
-                break
-            case _:
-                print('Invalid choice. Please retry.')
+        choice = input("Enter your choice (1-6): ").strip()
+
+        if choice == "1":
+            add_product()
+        elif choice == "2":
+            view_all_products()
+        elif choice == "3":
+            search_product()
+        elif choice == "4":
+            update_product()
+        elif choice == "5":
+            delete_product()
+        elif choice == "6":
+            print("Exiting application. Goodbye!")
+            break
+        else:
+            print("Invalid selection. Please choose an option between 1 and 6.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
