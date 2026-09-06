@@ -55,9 +55,88 @@ except RecordNotFoundError as e:
 ```
 """
 
-def solve():
-    # TODO: Implement your solution here
+from typing import Any, Dict, List, Union
+
+
+class RecordNotFoundError(Exception):
+    """Raised when a query by name returns no matching database record."""
     pass
 
+
+class DatabaseRecord:
+    def __init__(self, record_id: int, data: Dict[str, Any]):
+        self.record_id = int(record_id)
+        self.data = data
+
+    def __repr__(self) -> str:
+        return f"Record(id={self.record_id}, data={self.data})"
+
+    def __str__(self) -> str:
+        return f"Record(id={self.record_id}, data={self.data})"
+
+
+class ResultSetIterator:
+    def __init__(self, records_list: List[DatabaseRecord]):
+        self._records_list = records_list
+        self._index = 0
+
+    def __iter__(self) -> "ResultSetIterator":
+        return self
+
+    def __next__(self) -> DatabaseRecord:
+        if self._index >= len(self._records_list):
+            raise StopIteration
+        record = self._records_list[self._index]
+        self._index += 1
+        return record
+
+
+class DatabaseResultSet:
+    def __init__(self, records_list: List[DatabaseRecord]):
+        self._records_list = list(records_list)
+
+    def __len__(self) -> int:
+        return len(self._records_list)
+
+    def __iter__(self) -> ResultSetIterator:
+        return ResultSetIterator(self._records_list)
+
+    def __getitem__(self, key: Union[int, str]) -> DatabaseRecord:
+        if isinstance(key, int):
+            return self._records_list[key]
+        elif isinstance(key, str):
+            for record in self._records_list:
+                if isinstance(record.data, dict) and record.data.get("name") == key:
+                    return record
+            raise RecordNotFoundError(f"Record with name '{key}' not found in database.")
+        else:
+            raise TypeError(f"Invalid key type: {type(key).__name__}. Expected int or str.")
+
+
 if __name__ == "__main__":
-    solve()
+    # Setup records
+    r1 = DatabaseRecord(101, {"name": "Alice", "role": "Admin"})
+    r2 = DatabaseRecord(102, {"name": "Bob", "role": "User"})
+
+    results = DatabaseResultSet([r1, r2])
+
+    # 1. Length
+    print(len(results))  # Output: 2
+
+    # 2. Integer Indexing
+    print(results[0].data["role"])  # Output: Admin
+
+    # 3. String lookup
+    record = results["Bob"]
+    print(record.record_id)  # Output: 102
+
+    # 4. Iteration
+    print("Iterating over records:")
+    for rec in results:
+        print(f"  Record ID: {rec.record_id} -> {rec}")
+
+    # 5. Missing key lookup
+    try:
+        missing = results["Charlie"]
+    except RecordNotFoundError as e:
+        print(e)  # Output: Record with name 'Charlie' not found in database.

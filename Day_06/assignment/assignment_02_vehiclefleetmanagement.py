@@ -1,4 +1,4 @@
-"""
+r"""
 ### Assignment 2: Vehicle Fleet Management
 #### Scenario
 A delivery company manages different vehicle classes. They want to calculate travel range based on fuel capacity, and adjust range for trucks depending on cargo load.
@@ -25,40 +25,42 @@ print(truck.get_description())    # Output: Truck: Volvo FH16 carrying 2.0 tons
 ```
 """
 
+
 class Vehicle:
-    
-   def __init__(self,make,model,fuel_capacity):
-      self.make = make
-      self.model = model
-      self.fuel_capacity = fuel_capacity
+    def __init__(self, make: str, model: str, fuel_capacity: float):
+        self.make = make
+        self.model = model
+        self.fuel_capacity = float(fuel_capacity)
 
-   def calculate_range(self, fuel_efficiency):
-      range = self.fuel_capacity * fuel_efficiency
-      return range
+    def calculate_range(self, fuel_efficiency: float) -> float:
+        return self.fuel_capacity * fuel_efficiency
 
-   def get_description(self):
-      return f'Vehicle: {self.make} {self.model}'
+    def get_description(self) -> str:
+        return f"Vehicle: {self.make} {self.model}"
 
 
-class Delivery_Truck(Vehicle):
-    
-   def __init__(self,make,model,fuel_capacity, cargo_load):
-      super().__init__(make,model,fuel_capacity)
-      self.cargo_load = cargo_load
+class DeliveryTruck(Vehicle):
+    def __init__(self, make: str, model: str, fuel_capacity: float, cargo_load: float = 0.0):
+        super().__init__(make, model, fuel_capacity)
+        self.cargo_load = float(cargo_load)
 
-   def calculate_range(self, fuel_efficiency):
-      adjusted_range = (self.fuel_capacity * fuel_efficiency) * (1.0 - 0.1 * self.cargo_load) 
-      return adjusted_range
+    def calculate_range(self, fuel_efficiency: float) -> float:
+        base_range = super().calculate_range(fuel_efficiency)
+        adjusted_range = base_range * (1.0 - 0.1 * self.cargo_load)
+        return adjusted_range
 
-   def get_description(self):
-         return f'Truck: {self.make} {self.model} carrying {self.cargo_load} tons'
+    def get_description(self) -> str:
+        return f"Truck: {self.make} {self.model} carrying {self.cargo_load} tons"
 
-truck = Delivery_Truck("Volvo", "FH16", 300.0, cargo_load=2.0)
 
-# Base range calculations without load adjustment would be 300 * 5 = 1500 km.
-# 2.0 tons load reduces range by 20% (10% * 2) -> 1500 * 0.8 = 1200 km.
-print(truck.calculate_range(5.0)) # Output: 1200.0
-print(truck.get_description())    # Output: Truck: Volvo FH16 carrying 2.0 tons
+# Alias for compatibility with snake_case/alternate naming
+Delivery_Truck = DeliveryTruck
 
-        
 
+if __name__ == "__main__":
+    truck = DeliveryTruck("Volvo", "FH16", 300.0, cargo_load=2.0)
+
+    # Base range calculations without load adjustment would be 300 * 5 = 1500 km.
+    # 2.0 tons load reduces range by 20% (10% * 2) -> 1500 * 0.8 = 1200 km.
+    print(truck.calculate_range(5.0))  # Output: 1200.0
+    print(truck.get_description())     # Output: Truck: Volvo FH16 carrying 2.0 tons

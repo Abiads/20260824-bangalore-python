@@ -39,52 +39,47 @@ except ValueError as e:
 ```
 """
 
+
 class PriceAmount:
-    
-    def __init__(self, value:float, currency : str):
-      self.value = value
-      self.currency = currency.upper()
+    def __init__(self, value: float, currency: str):
+        self.value = float(value)
+        self.currency = currency.strip().upper()
 
-    def __str__(self):
-      return f'{self.currency} {self.value:.2f}'
+    def __str__(self) -> str:
+        return f"{self.currency} {self.value:.2f}"
 
-    def __repr__(self):
-      return f"PriceAmount {self.value:.2f} {self.currency}"
+    def __repr__(self) -> str:
+        return f"PriceAmount(value={self.value:.2f}, currency='{self.currency}')"
 
-    def __add__(self, other):
-      if not isinstance(other, PriceAmount):
-        return NotImplemented
-      if self.currency != other.currency:
-         raise ValueError(f'Cannot add price amounts with different currencies: {self.currency} and {other.currency}.')
+    def __add__(self, other: object) -> "PriceAmount":
+        if not isinstance(other, PriceAmount):
+            return NotImplemented
+        if self.currency != other.currency:
+            raise ValueError(
+                f"Cannot add price amounts with different currencies: '{self.currency}' and '{other.currency}'."
+            )
+        return PriceAmount(self.value + other.value, self.currency)
 
-      return PriceAmount(self.value + other.value, self.currency)
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, PriceAmount):
+            return False
+        return self.currency == other.currency and self.value == other.value
 
-    def __eq__(self, other):
-       
-       if self.currency == other.currency and self.value == other.value:
-          return True
-       
-       return False
-    
-    #   if not isinstance(other, PriceAmount):
-    #      return False
-      
-    #   return (self.currency == other.currency and self.value == other.value)
-          
 
-p1 = PriceAmount(19.99, "usd")
-p2 = PriceAmount(10.01, "USD")
-p3 = PriceAmount(15.00, "EUR")
+if __name__ == "__main__":
+    p1 = PriceAmount(19.99, "usd")
+    p2 = PriceAmount(10.01, "USD")
+    p3 = PriceAmount(15.00, "EUR")
 
-print(str(p1))      # Output: USD 19.99
-print(repr(p1))     # Output: PriceAmount(value=19.99, currency='USD')
+    print(str(p1))   # Output: USD 19.99
+    print(repr(p1))  # Output: PriceAmount(value=19.99, currency='USD')
 
-total = p1 + p2
-print(str(total))   # Output: USD 30.00
+    total = p1 + p2
+    print(str(total))  # Output: USD 30.00
 
-print(p1 == PriceAmount(19.99, "eur")) # Output: True
+    print(p1 == PriceAmount(19.99, "USD"))  # Output: True
 
-try:
-    bad_addition = p1 + p3
-except ValueError as e:
-    print(e)  # Output: Cannot add price amounts with different currencies: 'USD' and 'EUR'.
+    try:
+        bad_addition = p1 + p3
+    except ValueError as e:
+        print(e)  # Output: Cannot add price amounts with different currencies: 'USD' and 'EUR'.

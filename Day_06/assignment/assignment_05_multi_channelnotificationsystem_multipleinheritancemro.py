@@ -39,9 +39,64 @@ for log in logs:
 ```
 """
 
-def solve():
-    # TODO: Implement your solution here
-    pass
+from typing import List
+
+
+class Notifier:
+    def __init__(self, sender_id: str, **kwargs):
+        super().__init__(**kwargs)
+        self.sender_id = sender_id
+
+    def send(self, message: str) -> List[str]:
+        return [f"[Notifier {self.sender_id}] general broadcast: {message}"]
+
+
+class EmailNotifier(Notifier):
+    def __init__(self, email_server: str, **kwargs):
+        self.email_server = email_server
+        super().__init__(**kwargs)
+
+    def send(self, message: str) -> List[str]:
+        logs = super().send(message)
+        return [f"[Email via {self.email_server}] sending: {message}"] + logs
+
+
+class SMSNotifier(Notifier):
+    def __init__(self, sms_gateway: str, **kwargs):
+        self.sms_gateway = sms_gateway
+        super().__init__(**kwargs)
+
+    def send(self, message: str) -> List[str]:
+        logs = super().send(message)
+        return [f"[SMS via {self.sms_gateway}] sending: {message}"] + logs
+
+
+class HybridAlertChannel(EmailNotifier, SMSNotifier):
+    def __init__(self, sender_id: str, email_server: str, sms_gateway: str, **kwargs):
+        super().__init__(
+            sender_id=sender_id,
+            email_server=email_server,
+            sms_gateway=sms_gateway,
+            **kwargs,
+        )
+
+    def send(self, message: str) -> List[str]:
+        logs = super().send(message)
+        return ["[HYBRID ALERT] Initiating dual channels..."] + logs
+
 
 if __name__ == "__main__":
-    solve()
+    print("MRO of HybridAlertChannel:")
+    for idx, cls in enumerate(HybridAlertChannel.mro()):
+        print(f"  {idx + 1}. {cls.__name__}")
+
+    print("\nExecuting HybridAlertChannel.send():")
+    alert = HybridAlertChannel(
+        sender_id="SYS-ADMIN",
+        email_server="smtp.cdac.in",
+        sms_gateway="gw.acts.com",
+    )
+    logs = alert.send("Disk space 95%")
+
+    for log in logs:
+        print(log)

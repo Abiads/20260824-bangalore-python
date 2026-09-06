@@ -35,9 +35,43 @@ print(Patient.get_total_patients())  # Output: 1
 ```
 """
 
-def solve():
-    # TODO: Implement your solution here
-    pass
+import re
+
+
+class Patient:
+    _patient_counter: int = 0
+
+    @staticmethod
+    def validate_dob_format(dob_str: str) -> bool:
+        """Validates if date of birth string matches YYYY-MM-DD format using regex."""
+        if not isinstance(dob_str, str):
+            return False
+        return bool(re.match(r"^\d{4}-\d{2}-\d{2}$", dob_str))
+
+    def __init__(self, name: str, dob: str):
+        if not Patient.validate_dob_format(dob):
+            raise ValueError(f"Invalid date of birth format: '{dob}'. Expected YYYY-MM-DD.")
+
+        Patient._patient_counter += 1
+        self.patient_id = f"PAT-{1000 + Patient._patient_counter}"
+        self.name = name
+        self.dob = dob
+
+    @classmethod
+    def get_total_patients(cls) -> int:
+        """Returns the total number of patient instances created."""
+        return cls._patient_counter
+
 
 if __name__ == "__main__":
-    solve()
+    # 1. Valid Registration
+    p1 = Patient("Arham Khan", "1999-05-15")
+    print(p1.patient_id)  # Output: PAT-1001
+
+    # 2. Invalid DOB registration (throws ValueError)
+    try:
+        p2 = Patient("Lisa", "12/08/1998")
+    except ValueError as e:
+        print(e)  # Output: Invalid date of birth format: '12/08/1998'. Expected YYYY-MM-DD.
+
+    print(Patient.get_total_patients())  # Output: 1
