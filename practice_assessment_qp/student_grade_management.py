@@ -1,12 +1,6 @@
-"""
-STUDENT GRADE & ASSESSMENT MODULE
-CONTINUOUS EVALUATION & TRANSCRIPT PERSISTENCE SYSTEM
-Coursework: Python Systems Programming | Duration: 2 Hours | Maximum Marks: 40 | Target Topic: JSON File Persistence & Modular Analytics
-"""
-
 import json
 
-# Initial sample cohort dataset (for testing and initial seeding)
+# Initial sample data stored in a list of dictionaries
 students = [
     {"id": 1, "name": "Aarav Sharma", "course": "Python Core", "marks": 88.5, "grade": "A"},
     {"id": 2, "name": "Diya Patel", "course": "Data Science", "marks": 74.0, "grade": "B"},
@@ -15,19 +9,13 @@ students = [
     {"id": 5, "name": "Amit Verma", "course": "Data Science", "marks": 63.5, "grade": "C"}
 ]
 
-next_id = 6  # Tracks next auto-assigned student ID
-DEFAULT_JSON_FILEPATH = "students.json"
+next_id = 6  # Tracks the next auto-generated student ID
+FILE_NAME = "students.json"
 
 #-------------------------------------------------------------------------------------
 
-def compute_letter_grade(marks: float) -> str:
-    """
-    Automated Grade Evaluation Logic:
-    - Marks >= 85.0 -> Grade A
-    - Marks >= 70.0 and < 85.0 -> Grade B
-    - Marks >= 50.0 and < 70.0 -> Grade C
-    - Marks < 50.0 -> Grade F (Fail)
-    """
+def compute_letter_grade(marks):
+    """Calculates letter grade based on marks obtained."""
     if marks >= 85.0:
         return "A"
     elif marks >= 70.0:
@@ -39,18 +27,18 @@ def compute_letter_grade(marks: float) -> str:
 
 #-------------------------------------------------------------------------------------
 
-def get_non_empty_string(prompt: str) -> str:
-    """Prompts until a non-empty string is provided after stripping whitespace."""
+def get_non_empty_string(prompt):
+    """Prompts until a non-empty string is provided."""
     while True:
         value = input(prompt).strip()
         if value:
             return value
-        print("Error: Input string cannot be empty. Please re-enter.")
+        print("Error: Input cannot be empty. Please re-enter.")
 
 #-------------------------------------------------------------------------------------
 
-def get_valid_marks(prompt: str) -> float:
-    """Prompts until a valid float in the range [0.0, 100.0] is entered."""
+def get_valid_marks(prompt):
+    """Prompts until a valid float between 0.0 and 100.0 is entered."""
     while True:
         try:
             value = float(input(prompt))
@@ -58,245 +46,214 @@ def get_valid_marks(prompt: str) -> float:
                 return value
             print("Error: Marks must be between 0.0 and 100.0 inclusive.")
         except ValueError:
-            print("Error: Invalid numeric input. Please enter a valid decimal number.")
+            print("Error: Invalid numeric input. Please enter a valid number.")
 
 #-------------------------------------------------------------------------------------
 
-def render_single_student_card(student: dict) -> None:
-    """Renders a detailed inspection card for a single student."""
-    print("\n" + "=" * 45)
-    print("         STUDENT TRANSCRIPT CARD")
-    print("=" * 45)
-    print(f"  Student ID     : {student['id']}")
-    print(f"  Candidate Name : {student['name']}")
-    print(f"  Course / Module: {student['course']}")
-    print(f"  Marks Obtained : {student['marks']:.2f} / 100.0")
-    print(f"  Awarded Grade  : {student['grade']}")
-    print("=" * 45)
+def display_table(student_list):
+    """Helper function to print students in a neat tabular format."""
+    print(f"\n{'-'*70}")
+    print(f"{'ID':<5} | {'Name':<20} | {'Course':<20} | {'Marks':<10} | {'Grade':<6}")
+    print(f"{'-'*70}")
+    for s in student_list:
+        print(f"{s['id']:<5} | {s['name']:<20} | {s['course']:<20} | {s['marks']:<10.2f} | {s['grade']:<6}")
+    print(f"{'-'*70}")
 
 #-------------------------------------------------------------------------------------
 
-def render_cohort_table(cohort_list: list[dict]) -> None:
-    """Displays all student records in a structured tabular grid."""
-    if not cohort_list:
-        print("\n[!] The student cohort registry is currently empty.")
-        return
-
-    if len(cohort_list) == 1:
-        render_single_student_card(cohort_list[0])
-        return
-
-    print(f"\n{'-'*75}")
-    print(f"{'ID':^5} | {'Candidate Name':<22} | {'Course / Module':<22} | {'Marks':>7} | {'Grade':^7}")
-    print(f"{'-'*75}")
-    for s in cohort_list:
-        print(f"{s['id']:^5} | {s['name']:<22} | {s['course']:<22} | {s['marks']:>7.2f} | {s['grade']:^7}")
-    print(f"{'-'*75}")
-
-#-------------------------------------------------------------------------------------
-
-def enroll_student(cohort: list[dict], current_next_id: int) -> int:
-    """Prompts user for student info, calculates grade, and appends to cohort."""
-    print("\n--- Enroll New Student ---")
+def add_student():
+    """Adds a new student with auto-generated ID and calculated grade."""
+    global next_id
+    print("\n--- Add Student ---")
     name = get_non_empty_string("Enter Candidate Name: ")
-    course = get_non_empty_string("Enter Enrolled Course/Module: ")
-    marks = get_valid_marks("Enter Marks Obtained (0-100): ")
+    course = get_non_empty_string("Enter Course Name: ")
+    marks = get_valid_marks("Enter Marks (0-100): ")
     grade = compute_letter_grade(marks)
 
     new_student = {
-        "id": current_next_id,
+        "id": next_id,
         "name": name,
         "course": course,
         "marks": marks,
         "grade": grade
     }
-    cohort.append(new_student)
-    print(f"Success: Student '{name}' enrolled with ID: {current_next_id} (Awarded Grade: {grade})")
-    return current_next_id + 1
+    students.append(new_student)
+    print(f"Success: Student '{name}' enrolled with ID: {next_id} (Grade: {grade})")
+    next_id += 1
 
 #-------------------------------------------------------------------------------------
 
-def query_student_records(cohort: list[dict], search_term: str) -> list[dict]:
-    """Returns students matching exact numeric ID or case-insensitive name/course substring."""
-    search_term = search_term.strip()
-    if not search_term:
-        return []
-
-    # Numeric ID match
-    if search_term.isdigit():
-        target_id = int(search_term)
-        return [s for s in cohort if s["id"] == target_id]
-
-    # Substring search on Name or Course
-    query_lower = search_term.lower()
-    return [
-        s for s in cohort
-        if query_lower in s["name"].lower() or query_lower in s["course"].lower()
-    ]
+def view_all_students():
+    """Displays all students in the cohort."""
+    print("\n--- Student Cohort Directory ---")
+    if not students:
+        print("No student records currently available.")
+        return
+    display_table(students)
 
 #-------------------------------------------------------------------------------------
 
-def revise_student_evaluation(cohort: list[dict], student_id: int) -> bool:
-    """Updates candidate name, course, or marks (recalculating grade on marks change)."""
-    target = next((s for s in cohort if s["id"] == student_id), None)
+def search_student():
+    """Searches students by ID, Name, or Course."""
+    print("\n--- Search Student ---")
+    print("1. Search by ID")
+    print("2. Search by Name or Course")
+    choice = input("Enter choice (1/2): ").strip()
+
+    if choice == "1":
+        try:
+            search_id = int(input("Enter Student ID to search: "))
+            matches = [s for s in students if s["id"] == search_id]
+        except ValueError:
+            print("Error: ID must be an integer.")
+            return
+    elif choice == "2":
+        query = input("Enter Name or Course to search: ").strip().lower()
+        matches = [s for s in students if query in s["name"].lower() or query in s["course"].lower()]
+    else:
+        print("Invalid search choice.")
+        return
+
+    if matches:
+        display_table(matches)
+    else:
+        print("No matching students found.")
+
+#-------------------------------------------------------------------------------------
+
+def update_student():
+    """Updates student details and recalculates grade if marks change."""
+    print("\n--- Update Student Record ---")
+    try:
+        student_id = int(input("Enter Student ID to update: "))
+    except ValueError:
+        print("Error: Student ID must be an integer.")
+        return
+
+    target = next((s for s in students if s["id"] == student_id), None)
     if not target:
-        print(f"Error: Student with ID {student_id} not found in cohort.")
-        return False
+        print(f"Student with ID {student_id} not found.")
+        return
 
-    print(f"\n--- Revise Evaluation for ID {student_id}: '{target['name']}' ---")
-    print("(Press Enter directly to keep existing values)")
+    print(f"Updating Student: '{target['name']}' (ID: {target['id']})")
+    print("(Press Enter directly to keep the existing value)")
 
     # Name update
-    name_str = input(f"Enter new Candidate Name [{target['name']}]: ").strip()
-    if name_str:
-        target["name"] = name_str
+    new_name = input(f"Enter new Name [{target['name']}]: ").strip()
+    if new_name:
+        target["name"] = new_name
 
     # Course update
-    course_str = input(f"Enter new Course [{target['course']}]: ").strip()
-    if course_str:
-        target["course"] = course_str
+    new_course = input(f"Enter new Course [{target['course']}]: ").strip()
+    if new_course:
+        target["course"] = new_course
 
     # Marks update
-    marks_str = input(f"Enter new Marks [{target['marks']:.2f}]: ").strip()
-    if marks_str:
+    marks_input = input(f"Enter new Marks [{target['marks']}]: ").strip()
+    if marks_input:
         while True:
             try:
-                val = float(marks_str)
+                val = float(marks_input)
                 if 0.0 <= val <= 100.0:
                     target["marks"] = val
                     target["grade"] = compute_letter_grade(val)
-                    print(f"Grade automatically re-computed to: '{target['grade']}'")
+                    print(f"Grade automatically updated to: '{target['grade']}'")
                     break
                 print("Marks must be between 0.0 and 100.0.")
             except ValueError:
-                print("Invalid numeric value.")
-            marks_str = input("Re-enter valid Marks: ").strip()
+                print("Invalid number.")
+            marks_input = input("Re-enter valid Marks: ").strip()
 
-    print(f"Success: Student ID {student_id} evaluation record updated.")
-    return True
+    print(f"Success: Student ID {student_id} updated successfully.")
 
 #-------------------------------------------------------------------------------------
 
-def purge_student_record(cohort: list[dict], student_id: int) -> bool:
-    """Purges student record from cohort after explicit confirmation."""
-    for i, s in enumerate(cohort):
+def delete_student():
+    """Deletes a student record by ID."""
+    print("\n--- Delete Student ---")
+    try:
+        student_id = int(input("Enter Student ID to delete: "))
+    except ValueError:
+        print("Error: Student ID must be an integer.")
+        return
+
+    for i, s in enumerate(students):
         if s["id"] == student_id:
-            render_single_student_card(s)
-            confirm = input(f"Are you sure you want to purge '{s['name']}'? (y/n): ").strip().lower()
-            if confirm == 'y':
-                deleted = cohort.pop(i)
-                print(f"Success: Student '{deleted['name']}' (ID: {student_id}) purged from memory.")
-                return True
-            else:
-                print("Purge operation cancelled. Record retained.")
-                return False
+            deleted_item = students.pop(i)
+            print(f"Success: Student '{deleted_item['name']}' (ID: {student_id}) removed.")
+            return
 
-    print(f"Error: Student with ID {student_id} not found in cohort.")
-    return False
+    print(f"Student with ID {student_id} not found.")
 
 #-------------------------------------------------------------------------------------
 
-def save_cohort_to_json(filepath: str, cohort: list[dict]) -> None:
-    """Serializes cohort list to JSON file with indent=4."""
+def save_to_file():
+    """Saves all student records to students.json."""
     try:
-        with open(filepath, "w", encoding="utf-8") as f:
-            json.dump(cohort, f, indent=4)
-        print(f"Success: {len(cohort)} student record(s) serialized and saved to '{filepath}'.")
+        with open(FILE_NAME, "w", encoding="utf-8") as f:
+            json.dump(students, f, indent=4)
+        print(f"Success: {len(students)} record(s) saved to '{FILE_NAME}'.")
     except Exception as e:
-        print(f"Error: Failed to write JSON to '{filepath}': {e}")
+        print(f"Error saving to JSON file: {e}")
 
 #-------------------------------------------------------------------------------------
 
-def load_cohort_from_json(filepath: str) -> list[dict]:
-    """Deserializes student cohort records from JSON file."""
+def load_from_file():
+    """Loads student records from students.json."""
+    global students, next_id
     try:
-        with open(filepath, "r", encoding="utf-8") as f:
-            loaded_data = json.load(f)
-            if isinstance(loaded_data, list):
-                print(f"Success: {len(loaded_data)} student record(s) loaded from '{filepath}'.")
-                return loaded_data
+        with open(FILE_NAME, "r", encoding="utf-8") as f:
+            loaded = json.load(f)
+            if isinstance(loaded, list) and loaded:
+                students = loaded
+                next_id = max(s["id"] for s in students) + 1
+                print(f"Success: {len(students)} record(s) loaded from '{FILE_NAME}'.")
             else:
-                print("Error: JSON root is not a list. Skipping import.")
-                return []
+                print("JSON file was empty or invalid.")
     except FileNotFoundError:
-        print(f"Error: File '{filepath}' not found. Retaining active in-memory cohort.")
-        return []
-    except json.JSONDecodeError:
-        print(f"Error: Malformed JSON syntax in '{filepath}'. Unable to parse records.")
-        return []
+        print(f"File '{FILE_NAME}' not found.")
     except Exception as e:
-        print(f"Error: Unexpected error reading '{filepath}': {e}")
-        return []
+        print(f"Error loading from JSON file: {e}")
 
 #-------------------------------------------------------------------------------------
 
 def main():
-    """Interactive, menu-driven CLI controller."""
-    global students, next_id
-
+    """Main menu loop."""
     while True:
-        print("\n" + "=" * 55)
-        print("  STUDENT GRADE & ASSESSMENT MODULE (CLI CONTROLLER)")
-        print("=" * 55)
-        print("[1] Enroll Student")
-        print("[2] Cohort Directory")
-        print("[3] Query Records")
-        print("[4] Revise Evaluation")
-        print("[5] Purge Record")
-        print("[6] Save to JSON (students.json)")
-        print("[7] Load from JSON (students.json)")
-        print("[8] Terminate")
-        print("=" * 55)
+        print("\n===================================")
+        print("    STUDENT GRADE MANAGEMENT")
+        print("===================================")
+        print("1. Add Student")
+        print("2. View All Students")
+        print("3. Search Student")
+        print("4. Update Student")
+        print("5. Delete Student")
+        print("6. Save to File (students.json)")
+        print("7. Load from File (students.json)")
+        print("8. Exit")
+        print("===================================")
 
-        choice = input("Enter option [1-8]: ").strip()
+        choice = input("Enter your choice (1-8): ").strip()
 
         if choice == "1":
-            next_id = enroll_student(students, next_id)
-
+            add_student()
         elif choice == "2":
-            render_cohort_table(students)
-
+            view_all_students()
         elif choice == "3":
-            query = input("\nEnter Student ID, Candidate Name, or Course Name: ").strip()
-            results = query_student_records(students, query)
-            if results:
-                render_cohort_table(results)
-            else:
-                print(f"No records found matching '{query}'.")
-
+            search_student()
         elif choice == "4":
-            try:
-                s_id = int(input("\nEnter Student ID to revise: "))
-                revise_student_evaluation(students, s_id)
-            except ValueError:
-                print("Error: Student ID must be an integer.")
-
+            update_student()
         elif choice == "5":
-            try:
-                s_id = int(input("\nEnter Student ID to purge: "))
-                purge_student_record(students, s_id)
-            except ValueError:
-                print("Error: Student ID must be an integer.")
-
+            delete_student()
         elif choice == "6":
-            filepath = input(f"Enter target JSON filepath [{DEFAULT_JSON_FILEPATH}]: ").strip() or DEFAULT_JSON_FILEPATH
-            save_cohort_to_json(filepath, students)
-
+            save_to_file()
         elif choice == "7":
-            filepath = input(f"Enter source JSON filepath [{DEFAULT_JSON_FILEPATH}]: ").strip() or DEFAULT_JSON_FILEPATH
-            loaded = load_cohort_from_json(filepath)
-            if loaded:
-                students = loaded
-                max_id = max((s["id"] for s in students), default=0)
-                next_id = max_id + 1
-                print(f"Cohort updated in memory. Next available ID: {next_id}")
-
+            load_from_file()
         elif choice == "8":
-            print("\nTerminating Student Grade Module. Session concluded.")
+            print("Exiting application. Goodbye!")
             break
-
         else:
-            print("Invalid option selected. Please choose a valid command [1-8].")
+            print("Invalid selection. Please choose an option between 1 and 8.")
 
 #-------------------------------------------------------------------------------------
 
