@@ -32,10 +32,28 @@ print("Null dates after:", clean_df["shipped_date"].isna().sum())
 print(clean_df[clean_df["shipped_date"].str.startswith("In-Transit")][["ship_country", "shipped_date"]].head(2))
 ```
 """
+import pandas as pd
+import numpy as np
 
 def solve():
-    # TODO: Implement your solution here
-    pass
+    df = pd.read_csv("Northwind_Orders.csv")
+
+    # Ensure shipped_date is treated as string-like or NaN
+    # Fill null shipped_date based on ship_country
+    # 1. Define the condition: ship_country is USA or Canada
+    domestic_condition = df["ship_country"].isin(["USA", "Canada"])
+    
+    # 2. Use loc with np.nan to find nulls that satisfy the condition
+    df.loc[domestic_condition & df["shipped_date"].isna(), "shipped_date"] = "In-Transit: Domestic"
+    
+    # 3. Fill the remaining null shipped_date values (International)
+    df["shipped_date"] = df["shipped_date"].fillna("In-Transit: International")
+
+    # Fill null ship_region with "No-Region"
+    df["ship_region"] = df["ship_region"].fillna("No-Region")
+
+    print("Null dates after:", df["shipped_date"].isna().sum())
+    print(df[df["shipped_date"].str.startswith("In-Transit")][["ship_country", "shipped_date"]].head(2))
 
 if __name__ == "__main__":
     solve()

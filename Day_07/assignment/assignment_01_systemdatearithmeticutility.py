@@ -29,9 +29,27 @@ print(invalid_dates) # Output: None
 ```
 """
 
-def solve():
-    # TODO: Implement your solution here
-    pass
+import datetime
 
-if __name__ == "__main__":
-    solve()
+
+def calculate_backup_dates(start_date_str, retention_days):
+   
+   if start_date_str:
+     try:
+        datetime.datetime.strptime(start_date_str, "%Y-%m-%d")
+     except ValueError:
+        print("Invalid date format. Expected YYYY-MM-DD.")
+        return None     
+
+
+   retention_days = datetime.timedelta(days=retention_days)
+   expiry_date = start_date_str + retention_days
+   warning_date = expiry_date - datetime.timedelta(days=3)
+   return {
+       "expiry_date": expiry_date.strftime("%d-%b-%Y"),
+       "warning_date": warning_date.strftime("%d-%b-%Y")
+   }  
+
+
+    
+      
