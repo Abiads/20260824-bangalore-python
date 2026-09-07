@@ -1,15 +1,16 @@
-# Day 10: RESTful APIs with Flask & Numerical Computing with NumPy
+# Day 10: RESTful APIs with Flask, Web Scraping & Introduction to NumPy
 
-Welcome to Day 10! Today's session bridges two foundational pillars of modern software engineering and data-driven Python development:
+Welcome to Day 10! Today's session covers three practical and foundational topics in modern Python development:
 
-1. **RESTful Web Services using Flask**: Transitioning from traditional server-side rendered HTML applications (covered in Day 9) to building decoupled, stateless JSON web services that power Single Page Applications (React, Angular, Vue), mobile applications (iOS/Android), and distributed microservices.
-2. **Numerical Computing with NumPy**: Entering the scientific and data science ecosystem. We explore why standard Python lists are inefficient for numerical computing, how NumPy achieves near-C performance through contiguous memory and vectorization, the mechanics of $N$-dimensional arrays (`ndarray`), indexing/slicing (and the critical view vs. copy distinction), universal functions, broadcasting rules, multi-axis aggregations, and practical data normalization.
+1. **RESTful Web Services using Flask**: Building decoupled, stateless JSON APIs that power Single Page Applications (React, Angular, Vue), mobile applications, and distributed microservices.
+2. **Web Scraping Basics in Python**: Extracting structured data from web pages when no official API exists, using `requests` and `BeautifulSoup`.
+3. **Introduction to NumPy (Image Manipulation)**: Understanding high-performance numerical computing with `ndarray` and manipulating digital images directly as multi-dimensional arrays.
 
 ---
 
 ## Table of Contents
 
-- [Day 10: RESTful APIs with Flask \& Numerical Computing with NumPy](#day-10-restful-apis-with-flask--numerical-computing-with-numpy)
+- [Day 10: RESTful APIs with Flask, Web Scraping \& Introduction to NumPy](#day-10-restful-apis-with-flask-web-scraping--introduction-to-numpy)
   - [Table of Contents](#table-of-contents)
 - [SECTION A: Fundamentals of REST API using Flask](#section-a-fundamentals-of-rest-api-using-flask)
   - [Part 1: Architectural Foundations of REST](#part-1-architectural-foundations-of-rest)
@@ -31,28 +32,19 @@ Welcome to Day 10! Today's session bridges two foundational pillars of modern so
     - [2. Database Schema \& Helper Module (`database.py`)](#2-database-schema--helper-module-databasepy)
     - [3. The REST API Application (`app.py`)](#3-the-rest-api-application-apppy)
     - [4. Testing Endpoints with `curl`](#4-testing-endpoints-with-curl)
-
-<!-- 
-
-- [SECTION B: Introduction to NumPy \& Practical Applications](#section-b-introduction-to-numpy--practical-applications)
-  - [Part 5: Introduction to NumPy \& Its Real-World Uses](#part-5-introduction-to-numpy--its-real-world-uses)
-    - [1. What is NumPy?](#1-what-is-numpy)
-    - [2. Where is NumPy Used in the Real World?](#2-where-is-numpy-used-in-the-real-world)
-    - [3. The Core Object: `ndarray` vs. Python Lists](#3-the-core-object-ndarray-vs-python-lists)
-    - [4. NumPy Basics: Creation, Attributes, Slicing \& Vectorization](#4-numpy-basics-creation-attributes-slicing--vectorization)
-  - [Part 6: Image Manipulation with NumPy](#part-6-image-manipulation-with-numpy)
-    - [1. Digital Images as NumPy Arrays](#1-digital-images-as-numpy-arrays)
-    - [2. Loading \& Saving Images with PIL and NumPy](#2-loading--saving-images-with-pil-and-numpy)
-    - [3. Converting to Grayscale](#3-converting-to-grayscale)
-    - [4. Manipulating Image Color Temperature (Warm vs. Cool Tones)](#4-manipulating-image-color-temperature-warm-vs-cool-tones)
-    - [5. Scaling Images (Downscaling \& Upscaling via Slicing \& `np.repeat`)](#5-scaling-images-downscaling--upscaling-via-slicing--nprepeat)
-    - [6. Additional Common Manipulations: Flipping, Cropping, and Brightness](#6-additional-common-manipulations-flipping-cropping-and-brightness)
-  - [Part 7: Image Steganography: Hiding Secret Messages](#part-7-image-steganography-hiding-secret-messages)
-    - [1. What is Steganography?](#1-what-is-steganography)
-    - [2. The Concept: Least Significant Bit (LSB) Hiding](#2-the-concept-least-significant-bit-lsb-hiding)
-    - [3. Step-by-Step Implementation: Hiding \& Extracting a Secret Message](#3-step-by-step-implementation-hiding--extracting-a-secret-message)
-    - [4. Why the Image Looks Completely Unchanged](#4-why-the-image-looks-completely-unchanged)
-  - [Summary \& Quick Reference: NumPy, Images \& Steganography](#summary--quick-reference-numpy-images--steganography) -->
+- [SECTION B: Web Scraping Basics in Python](#section-b-web-scraping-basics-in-python)
+  - [1. What is Web Scraping?](#1-what-is-web-scraping)
+  - [2. Key Libraries: `requests` and `BeautifulSoup`](#2-key-libraries-requests-and-beautifulsoup)
+  - [3. Core Scraping Workflow \& Methods](#3-core-scraping-workflow--methods)
+  - [4. Practical Scraping Example](#4-practical-scraping-example)
+  - [5. Best Practices \& Ethical Scraping](#5-best-practices--ethical-scraping)
+- [SECTION C: Introduction to NumPy & Image Manipulation](#section-c-introduction-to-numpy--image-manipulation)
+  - [1. Introduction to NumPy: Capabilities, Applications & List Comparison](#1-introduction-to-numpy-capabilities-applications--list-comparison)
+  - [2. Digital Images as NumPy Arrays](#2-digital-images-as-numpy-arrays)
+  - [3. Loading \& Inspecting an Image](#3-loading--inspecting-an-image)
+  - [4. Image Manipulation Examples](#4-image-manipulation-examples)
+  - [5. Complete Image Processing Script](#5-complete-image-processing-script)
+  - [Quick Reference: Common Image Operations](#quick-reference-common-image-operations)
 
 ---
 
@@ -909,3 +901,461 @@ curl -X DELETE http://127.0.0.1:5000/api/v1/products/1
 ```
 
 ---
+
+# SECTION B: Web Scraping Basics in Python
+
+---
+
+### 1. What is Web Scraping?
+
+**Web scraping** is the automated process of extracting data from website HTML pages. While REST APIs (covered in Section A) deliver structured JSON data cleanly, many websites do not provide a public API. Web scraping bridges this gap by:
+1. Sending an HTTP request to download the target web page.
+2. Parsing the resulting HTML document into a searchable tree structure (DOM).
+3. Searching and extracting targeted elements (headings, article text, table data, links).
+4. Saving or processing the data into structured formats (lists, dictionaries, CSV files).
+
+```mermaid
+flowchart LR
+    URL["Target Web Page"] -->|1. HTTP GET requests| HTML["HTML Content"]
+    HTML -->|2. Parse DOM BeautifulSoup| DOM["Tag Hierarchy"]
+    DOM -->|3. Extract Data find / find_all| Data["Structured Data"]
+    Data -->|4. Save / Export| Out["CSV / JSON / Database"]
+```
+
+---
+
+### 2. Key Libraries: `requests` and `BeautifulSoup`
+
+Python provides two industry-standard libraries for web scraping:
+
+```bash
+pip install requests beautifulsoup4
+```
+
+* **`requests`**: Handles HTTP networking. It sends requests (`GET`, `POST`) and fetches the server's HTML response.
+* **`beautifulsoup4` (`bs4`)**: A powerful HTML parser that navigates and queries elements using tag names, CSS classes, IDs, and attributes.
+
+---
+
+### 3. Core Scraping Workflow & Methods
+
+#### A. Fetching and Creating the "Soup"
+```python
+import requests
+from bs4 import BeautifulSoup
+
+url = "http://quotes.toscrape.com/"
+headers = {"User-Agent": "Mozilla/5.0 (Educational Scraping Demo)"}
+
+# 1. Fetch web page
+response = requests.get(url, headers=headers, timeout=10)
+response.raise_for_status()  # Raises an exception if the HTTP request failed (e.g. 404, 500)
+
+# 2. Parse HTML into a BeautifulSoup object
+soup = BeautifulSoup(response.text, "html.parser")
+```
+
+#### B. Searching Elements
+| Method | Purpose | Example |
+| :--- | :--- | :--- |
+| `soup.find("tag")` | Finds the **first** matching element | `first_h1 = soup.find("h1")` |
+| `soup.find_all("tag")` | Finds **all** matching elements (returns list) | `all_paragraphs = soup.find_all("p")` |
+| `soup.find("tag", class_="name")` | Finds by CSS class (use `class_`) | `card = soup.find("div", class_="quote")` |
+| `soup.find("tag", id="name")` | Finds by element ID | `header = soup.find("nav", id="navbar")` |
+| `soup.select("css selector")` | Finds using standard CSS selectors | `items = soup.select(".list-group > li.item")` |
+
+#### C. Extracting Text and Attributes
+```python
+# Extract clean inner text (.strip removes surrounding whitespace)
+heading_text = soup.find("h1").get_text(strip=True)
+
+# Extract HTML attributes (href, src, alt, etc.)
+first_link = soup.find("a")
+href_url = first_link.get("href")
+```
+
+---
+
+### 4. Practical Scraping Example
+
+The following script demonstrates scraping quotes, authors, and topic tags from **Quotes to Scrape** (a public sandbox site built specifically for scraping practice):
+
+```python
+"""
+web_scraping_demo.py - Scrape quotes, authors, and tags using requests and BeautifulSoup.
+"""
+
+import requests
+from bs4 import BeautifulSoup
+
+
+def scrape_quotes():
+    url = "http://quotes.toscrape.com/"
+    headers = {"User-Agent": "PythonStudentScraper/1.0"}
+
+    print(f"Fetching {url} ...")
+    response = requests.get(url, headers=headers, timeout=10)
+    response.raise_for_status()
+
+    # Parse HTML
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    # Find all quote container blocks (<div class="quote">)
+    quote_blocks = soup.find_all("div", class_="quote")
+    print(f"Found {len(quote_blocks)} quotes on the page.\n")
+
+    results = []
+    for block in quote_blocks:
+        # Extract quote text (<span class="text">)
+        text = block.find("span", class_="text").get_text(strip=True)
+
+        # Extract author name (<small class="author">)
+        author = block.find("small", class_="author").get_text(strip=True)
+
+        # Extract tags (<a class="tag">)
+        tag_elements = block.find_all("a", class_="tag")
+        tags = [t.get_text(strip=True) for t in tag_elements]
+
+        results.append({
+            "quote": text,
+            "author": author,
+            "tags": tags
+        })
+
+    return results
+
+
+if __name__ == "__main__":
+    quotes = scrape_quotes()
+
+    # Display the first 3 scraped quotes
+    for i, item in enumerate(quotes[:3], 1):
+        print(f"{i}. \"{item['quote']}\"")
+        print(f"   - Author: {item['author']}")
+        print(f"   - Tags  : {', '.join(item['tags'])}\n")
+```
+
+**Execution Output:**
+```
+Fetching http://quotes.toscrape.com/ ...
+Found 10 quotes on the page.
+
+1. "“The world as we have created it is a process of our thinking. It cannot be changed without changing our thinking.”"
+   - Author: Albert Einstein
+   - Tags  : change, deep-thoughts, thinking, world
+
+2. "“It is our choices, Harry, that show what we truly are, far more than our abilities.”"
+   - Author: J.K. Rowling
+   - Tags  : abilities, choices
+
+3. "“There are only two ways to live your life. One is as though nothing is a miracle. The other is as though everything is a miracle.”"
+   - Author: Albert Einstein
+   - Tags  : inspirational, life, live, miracle, miracles
+```
+
+---
+
+### 5. Best Practices & Ethical Scraping
+
+1. **Inspect `robots.txt`**: Check `https://website.com/robots.txt` before scraping to see which paths are disallowed for automated bots.
+2. **Set a Custom `User-Agent`**: Identify your script in request headers so server administrators know who is requesting data.
+3. **Rate Limiting**: Use `time.sleep(1)` between multiple page requests to avoid overwhelming target servers.
+4. **Prefer Official APIs**: If a website provides a free or official REST API, always use the API instead of web scraping.
+5. **Handle Network Exceptions**: Wrap requests in `try / except requests.RequestException` and always include a `timeout` argument.
+
+---
+
+# SECTION C: Introduction to NumPy & Image Manipulation
+
+---
+
+### 1. Introduction to NumPy: Capabilities, Applications & List Comparison
+
+#### A. What is NumPy?
+**NumPy** (short for **Numerical Python**) is the core library for scientific, numerical, and data-driven computing in Python. Created in 2005 by Travis Oliphant, it provides the foundational data structure that underpins virtually the entire modern Python data science and machine learning ecosystem: the **`ndarray`** ($N$-dimensional array).
+
+While Python is an expressive, dynamic language prized for developer productivity, pure Python loops are notoriously slow when processing millions of arithmetic operations. NumPy overcomes this bottleneck by executing numerical operations using pre-compiled, optimized **C and Fortran routines** under the hood, while exposing an intuitive, high-level Python API.
+
+```bash
+pip install numpy pillow
+```
+
+---
+
+#### B. Core Capabilities of NumPy
+1. **$N$-Dimensional Array (`ndarray`)**: Fast, memory-efficient multi-dimensional arrays supporting 1D vectors, 2D matrices, 3D image arrays, and higher-dimensional tensors.
+2. **Vectorization**: Perform math operations on entire arrays simultaneously without writing explicit Python `for` loops.
+3. **Broadcasting**: Automatically compute arithmetic between arrays of different but compatible dimensions (e.g. adding a 1D vector across all rows of a 2D matrix, or applying a 3-channel color multiplier to an entire image).
+4. **Universal Functions (`ufuncs`)**: Fast element-wise mathematical functions (e.g., `np.sin`, `np.exp`, `np.log`, `np.sqrt`, `np.clip`) executed directly in compiled C.
+5. **Linear Algebra**: Native support for matrix multiplication (`@`), dot products, inversions, eigenvalues, and decompositions.
+6. **Random Number Generation**: Fast generation of statistical distributions (normal, uniform, binomial) using modern pseudo-random BitGenerators.
+
+---
+
+#### C. Real-World Fields of Application
+NumPy is the foundational bedrock upon which the modern Python data ecosystem is built:
+
+| Field | How NumPy is Applied | Key Libraries Powered by NumPy |
+| :--- | :--- | :--- |
+| **Data Science & Analytics** | Tabular data manipulation, statistical aggregations, missing-data handling, time-series analysis. | **Pandas**, **Polars**, **Statsmodels** |
+| **Machine Learning & AI** | Feature vectors, gradient computations, model weight matrices. PyTorch and TensorFlow tensors are modeled directly after NumPy's `ndarray`. | **scikit-learn**, **PyTorch**, **TensorFlow** |
+| **Computer Vision & Image Processing** | Digital images and video frames are stored and processed directly as 2D/3D pixel matrices. | **OpenCV**, **Pillow (PIL)**, **scikit-image** |
+| **Audio & Signal Processing** | Digital audio waveforms, sampling rates, frequencies, and Fast Fourier Transforms (FFT). | **SciPy (signal)**, **Librosa** |
+| **Quantitative Finance** | Algorithmic trading, portfolio optimization, options pricing (Monte Carlo / Black-Scholes models), risk management. | **QuantLib**, **TA-Lib** |
+| **Physics & Engineering Simulations** | Fluid dynamics, weather forecasting, molecular dynamics, and astronomical imaging (e.g., the Event Horizon Telescope black hole photo). | **SciPy**, **Astropy**, **Biopython** |
+
+---
+
+#### D. NumPy `ndarray` vs. Python List: Why Not Just Use Lists?
+
+At first glance, a Python `list` might seem similar to a NumPy array. However, their internal memory architecture and performance characteristics are fundamentally different:
+
+```
+Python List Memory Layout (Array of Pointers):
+List Object -> [ Ptr 1 | Ptr 2 | Ptr 3 | Ptr 4 ]
+                   |       |       |       |
+                   v       v       v       v
+               [PyObject] [PyObject] [PyObject] [PyObject]  (Scattered across Heap memory!)
+
+NumPy ndarray Memory Layout (Contiguous C Buffer):
+ndarray Object -> [ Value 1 | Value 2 | Value 3 | Value 4 ] (Packed tightly in one contiguous block!)
+```
+
+| Feature | Python Standard `list` | NumPy `ndarray` |
+| :--- | :--- | :--- |
+| **Memory Layout** | **Scattered**: An array of pointers referencing independent Python objects scattered across heap memory. | **Contiguous**: Elements are stored back-to-back in a single, unbroken block of memory (C-style layout). |
+| **Data Types** | **Heterogeneous**: Can hold integers, strings, floats, and objects within the same list. | **Homogeneous**: Every element has the exact same data type (e.g. all `int32`, `float64`, or `uint8`). |
+| **Memory Overhead** | **High**: Each number is a full Python object (~28 bytes for an integer + 8 bytes pointer = ~36 bytes per number). | **Minimal**: Stored as raw binary bytes (e.g., `uint8` = exactly 1 byte per value). |
+| **Execution Speed** | **Slow**: Loops must dereference pointers and perform dynamic type checking on every iteration. | **Blazing Fast**: Leverages CPU cache locality, SIMD (Single Instruction Multiple Data), and C-level execution. |
+| **Math Operations** | `list + [5]` **appends** element `5` to the list; `list * 2` **duplicates** the list contents. | `arr + 5` **adds 5 to every element**; `arr * 2` **doubles every value**. |
+| **Multi-Dimensional Indexing** | Nested indexing: `matrix[row][col]` | Clean matrix coordinate indexing: `arr[row, col]` or `img[y, x, channel]` |
+
+---
+
+#### E. Performance Benchmark: List vs. NumPy
+
+Run this short benchmark to observe the real-world performance difference between a Python list loop and NumPy vectorization on 1,000,000 numbers:
+
+```python
+"""
+benchmark_list_vs_numpy.py - Comparing execution speed of Python list vs. NumPy array.
+"""
+
+import time
+import numpy as np
+
+SIZE = 1_000_000
+
+# 1. Python List: Element-wise doubling via list comprehension
+py_list = list(range(SIZE))
+start = time.time()
+list_result = [x * 2 for x in py_list]
+list_time = time.time() - start
+
+# 2. NumPy Array: Element-wise doubling via vectorization
+np_arr = np.arange(SIZE)
+start = time.time()
+np_result = np_arr * 2
+numpy_time = time.time() - start
+
+print(f"Python List time : {list_time:.4f} seconds")
+print(f"NumPy Array time : {numpy_time:.4f} seconds")
+print(f"-> NumPy is {list_time / numpy_time:.1f}x faster!")
+```
+
+**Typical Output:**
+```
+Python List time : 0.0465 seconds
+NumPy Array time : 0.0036 seconds
+-> NumPy is 12.7x faster!
+```
+
+---
+
+### 2. Digital Images as NumPy Arrays
+
+Every digital picture is simply a multi-dimensional grid of numbers:
+
+* **Grayscale Image (2D Matrix)**:
+  * Shape: `(Height, Width)`
+  * Each element is an integer from `0` (black) to `255` (white).
+* **Color Image (3D Array - RGB)**:
+  * Shape: `(Height, Width, 3)`
+  * Channel 0: **Red** ($0$ to $255$)
+  * Channel 1: **Green** ($0$ to $255$)
+  * Channel 2: **Blue** ($0$ to $255$)
+* **Data Type**: Digital images use **`np.uint8`** (unsigned 8-bit integers, $0 \le \text{value} \le 255$).
+
+```
+Image Coordinate System:
+      (0,0) --------------> Column X (Width, Axis 1)
+        |
+        |       Pixel [y, x] = [Red, Green, Blue]  (Axis 2)
+        v
+      Row Y (Height, Axis 0)
+```
+
+The Python imaging library **Pillow (`PIL`)** bridges images on disk with NumPy arrays:
+* **Disk $\rightarrow$ NumPy**: `img = np.array(Image.open("photo.jpg"))`
+* **NumPy $\rightarrow$ Disk**: `Image.fromarray(img).save("output.jpg")`
+
+---
+
+### 3. Loading & Inspecting an Image
+
+```python
+from PIL import Image
+import numpy as np
+
+# 1. Load an image file into a NumPy array
+# (You can use any JPG or PNG image on your computer)
+img = np.array(Image.open("sample.jpg"))
+
+# 2. Inspect core array attributes
+print("Data Type :", img.dtype)  # uint8 (values from 0 to 255)
+print("Dimensions:", img.ndim)   # 3 (Height, Width, Color Channels)
+print("Shape     :", img.shape)  # e.g., (300, 400, 3) -> 300 rows, 400 cols, 3 channels
+print("Pixel(0,0):", img[0, 0])  # [R, G, B] values of the top-left pixel
+```
+
+---
+
+### 4. Image Manipulation Examples
+
+Because an image is just a NumPy array, you can manipulate it using basic array slicing, indexing, and vectorized math:
+
+#### A. Cropping (2D Slicing)
+Extract a sub-region using standard Python slice notation `[ymin:ymax, xmin:xmax]`:
+```python
+# Crop a region: rows 50 to 200, columns 100 to 300
+# Tip: Use .copy() to create an independent array
+cropped = img[50:200, 100:300].copy()
+Image.fromarray(cropped).save("cropped.jpg")
+```
+
+#### B. Flipping (Reversing Axes)
+Mirror or turn an image upside-down by reversing array indices (`[::-1]`):
+```python
+# Horizontal Flip (Mirror: reverse columns along Axis 1)
+horizontal_flip = img[:, ::-1]
+Image.fromarray(horizontal_flip).save("flipped_horizontal.jpg")
+
+# Vertical Flip (Upside-down: reverse rows along Axis 0)
+vertical_flip = img[::-1, :]
+Image.fromarray(vertical_flip).save("flipped_vertical.jpg")
+```
+
+#### C. Adjusting Brightness & Tone (Vectorized Math & Clamping)
+To increase brightness or adjust color channels, add or multiply values across the array.
+
+> [!WARNING]
+> In `uint8` math, values wrap around if they exceed 255 ($240 + 30 = 270 \rightarrow 14$). Always clamp values between $0$ and $255$ using **`np.clip()`**:
+
+```python
+# 1. Increase Brightness (+40):
+brightened = np.clip(img.astype(np.int16) + 40, 0, 255).astype(np.uint8)
+Image.fromarray(brightened).save("brightened.jpg")
+
+# 2. Warm Sunset Tint (Boost Red, soften Blue via broadcasting):
+warm_filter = np.array([1.25, 1.05, 0.75])
+warm_img = np.clip(img * warm_filter, 0, 255).astype(np.uint8)
+Image.fromarray(warm_img).save("warm_tint.jpg")
+```
+
+#### D. Converting to Grayscale
+Use the standard human eye perceptual luminance formula ($0.299R + 0.587G + 0.114B$):
+```python
+# Convert 3D RGB array to 2D Grayscale matrix
+gray = (
+    img[:, :, 0] * 0.299 +
+    img[:, :, 1] * 0.587 +
+    img[:, :, 2] * 0.114
+).astype(np.uint8)
+
+Image.fromarray(gray).save("grayscale.jpg")
+print("Grayscale Shape:", gray.shape)  # 2D array: (Height, Width)
+```
+
+---
+
+### 5. Complete Image Processing Script
+
+Here is a complete, self-contained Python script demonstrating loading, manipulating, and saving images. If you do not have an image ready, it automatically creates a starter `sample.jpg`:
+
+```python
+"""
+numpy_image_demo.py - Basic image loading and manipulation with NumPy and Pillow.
+"""
+
+import os
+import numpy as np
+from PIL import Image, ImageDraw
+
+
+def get_or_create_sample_image(filename: str = "sample.jpg") -> None:
+    """Creates a starter sample image if one does not already exist."""
+    if not os.path.exists(filename):
+        img = Image.new("RGB", (400, 300), color=(135, 206, 235))  # Sky blue
+        draw = ImageDraw.Draw(img)
+        draw.rectangle([0, 180, 400, 300], fill=(34, 139, 34))     # Green grass
+        draw.ellipse([280, 40, 360, 120], fill=(255, 215, 0))       # Sun
+        img.save(filename)
+        print(f"Created starter '{filename}'")
+
+
+def main():
+    # Ensure a sample image exists to work with
+    get_or_create_sample_image("sample.jpg")
+
+    # 1. Load image from disk into a NumPy array
+    img = np.array(Image.open("sample.jpg"))
+    h, w, c = img.shape
+    print(f"Loaded image: {w}x{h} pixels, shape: {img.shape}, dtype: {img.dtype}")
+
+    # 2. Crop center region
+    cropped = img[h // 4 : 3 * h // 4, w // 4 : 3 * w // 4].copy()
+    Image.fromarray(cropped).save("output_cropped.jpg")
+
+    # 3. Horizontal mirror flip
+    flipped = img[:, ::-1]
+    Image.fromarray(flipped).save("output_flipped.jpg")
+
+    # 4. Warm sunset color tint (broadcasting)
+    warm = np.clip(img * [1.25, 1.05, 0.75], 0, 255).astype(np.uint8)
+    Image.fromarray(warm).save("output_warm.jpg")
+
+    # 5. Grayscale conversion
+    gray = (img[:, :, 0] * 0.299 + img[:, :, 1] * 0.587 + img[:, :, 2] * 0.114).astype(np.uint8)
+    Image.fromarray(gray).save("output_gray.jpg")
+
+    # 6. Side-by-side comparison (Horizontal stack)
+    comparison = np.hstack((img, warm))
+    Image.fromarray(comparison).save("output_comparison.jpg")
+
+    print("\nSuccessfully processed and saved:")
+    print(" - output_cropped.jpg")
+    print(" - output_flipped.jpg")
+    print(" - output_warm.jpg")
+    print(" - output_gray.jpg")
+    print(" - output_comparison.jpg")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+---
+
+### Quick Reference: Common Image Operations
+
+| Operation | NumPy Code | Purpose |
+| :--- | :--- | :--- |
+| **Load Image** | `np.array(Image.open("pic.jpg"))` | Converts image to 3D `uint8` array. |
+| **Save Image** | `Image.fromarray(arr).save("out.jpg")` | Converts `uint8` array back to image file. |
+| **Crop** | `img[y1:y2, x1:x2].copy()` | Extracts bounding box region. |
+| **Horizontal Flip** | `img[:, ::-1]` | Mirrors left-to-right. |
+| **Vertical Flip** | `img[::-1, :]` | Flips upside-down. |
+| **Brightness** | `np.clip(img.astype(np.int16) + 40, 0, 255).astype(np.uint8)` | Safely brightens pixels without overflow. |
+| **Grayscale** | `(R*0.299 + G*0.587 + B*0.114).astype(np.uint8)` | Converts 3D RGB to 2D perceptual grayscale. |
+| **Stack Side-by-Side** | `np.hstack((img1, img2))` | Places two images together for comparison. |
+
