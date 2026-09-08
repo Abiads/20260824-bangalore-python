@@ -51,11 +51,12 @@ def get_non_negative_int(prompt):
 def display_table(book_list):
     """Helper function to print books in a neat tabular format."""
     print(f"\n{'-'*75}")
-    print(f"{'ID':<5} | {'Title':<24} | {'Author':<18} | {'Genre':<10} | {'Price (₹)':<10} | {'Copies':<6}")
-    print(f"{'-'*75}")
+    if not book_list:
+        print("Library is empty.")
     for b in book_list:
-        print(f"{b['id']:<5} | {b['title']:<24} | {b['author']:<18} | {b['genre']:<10} | {b['price']:<10.2f} | {b['copies']:<6}")
+        print(f"{b['id']} | {b['title']} | {b['author']} | {b['genre']} | {b['price']} | {b['copies']}")
     print(f"{'-'*75}")
+   
 
 #-------------------------------------------------------------------------------------
 

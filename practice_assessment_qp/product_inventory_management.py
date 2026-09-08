@@ -1,4 +1,4 @@
-# Initial sample data stored in a list of dictionaries
+    # Initial sample data stored in a list of dictionaries
 products = [
     {"id": 1, "name": "Laptop", "category": "Electronics", "price": 55000.0, "quantity": 10},
     {"id": 2, "name": "Smartphone", "category": "Electronics", "price": 20000.0, "quantity": 25},

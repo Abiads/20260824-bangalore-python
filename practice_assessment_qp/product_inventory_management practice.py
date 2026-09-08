@@ -14,8 +14,7 @@ def get_num(prompt, cast=float):
             if val > 0:
                 return val
         except ValueError:
-            pass
-        print("Error: Please enter a valid positive number.")
+            print("Error: Please enter a valid positive number.")
 
 
 def add_product():
