@@ -19,6 +19,7 @@ def menu():
     3. Export customer data as JSON
     4. Export customer data as CSV
     5. Export customer data to text file (semicolon delimited)
+    6. Load from text file (semicolon delimited)
     """)
 
     try:
@@ -92,6 +93,25 @@ def export_to_text_file():
         print("System error message - " + err)
 #------------------------------------------------------------------
 
+def load_from_text_file():
+    global customers
+    try:
+        filename = input("Enter text filename: ")
+        with open(filename) as file:
+            customers = []
+            for line in file:
+                cid, name, city = line.strip().split(";")
+                customers.append({
+                    "id": cid,
+                    "name": name,
+                    "city": city
+                })
+    except Exception as err:
+        print("Something went wrong")
+        print("System error message - " + err)
+
+#------------------------------------------------------------------
+
 def main():
     while True:
         match menu():
@@ -107,7 +127,8 @@ def main():
                 export_to_csv_file()
             case 5:
                 export_to_text_file()
-                            
+            case 6:
+                load_from_text_file()
             case _:
                 print("Invalid choice!")
 
