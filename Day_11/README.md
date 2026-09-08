@@ -146,7 +146,7 @@ Each row represents an individual line item on a customer invoice, containing de
 | **`Total Line Revenue`** | String (e.g. `"$49.75 "`)| Total money received: `Price Per Toy * Units Sold` | Strip `$`, trim spaces, convert to `float` |
 | **`Total COGS`** | String (e.g. `"$25.85 "`)| Cost of Goods Sold (wholesale cost to retailer) | Strip `$`, trim spaces, convert to `float` |
 | **`Payment`** | String | Tender method (`Visa`, `Cash`, `Mastercard`, etc.)| Categorical |
-| **`Cashier ID`** | String (e.g. `V.W.|880-4523`)| Cashier initials joined with employee phone/station | Split into Cashier Code & Extension |
+| **`Cashier ID`** | String (e.g. `V.W.\|880-4523`)| Cashier initials joined with employee phone/station | Split into Cashier Code & Extension |
 | **`Member?`** | String (`Yes` / `No`) | Store loyalty program membership status | Convert to Boolean (`True`/`False`) |
 | **`Coupon?`** | String (`Yes` / `No`) | Whether a promotional coupon was applied | Convert to Boolean (`True`/`False`) |
 | **`Purchaser Age`** | Integer (6 to 75) | Age of the person paying at the checkout counter | Numeric integer |

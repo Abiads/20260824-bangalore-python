@@ -6820,26 +6820,26 @@ Each row represents an individual line item on a customer invoice, containing de
 
 ### 2. Data Dictionary
 
-| Column Name                  | Raw Data Type             | Real-World Description                                   | Data Preparation Needed                             |
-| :--------------------------- | :------------------------ | :------------------------------------------------------- | :-------------------------------------------------- | ----------------------------------- |
-| **`Invoice Number`**         | Integer / String          | Unique order transaction ID (multiple items share an ID) | Treat as categorical/identifier                     |
-| **`Date`**                   | String (`M/D/YYYY`)       | Transaction date (e.g. `1/7/2010`)                       | Convert to `datetime64[ns]`                         |
-| **`Time`**                   | String (`HH:MM`)          | 24-hour time of purchase (e.g. `14:19`)                  | Parse hour for time-of-day analysis                 |
-| **`Internal Toy ID Number`** | String                    | Warehouse SKU code (e.g. `D255/FE`)                      | Text categorical                                    |
-| **`Toy Item Number`**        | Integer / String          | Catalog product ID number (e.g. `192`)                   | Text identifier                                     |
-| **`Toy Company`**            | String                    | Brand manufacturer (`Duplo`, `Lego`)                     | Clean categorical                                   |
-| **`Toy Name`**               | String                    | Product name (e.g., `Policemen`, `Airplane`)             | Clean categorical                                   |
-| **`Suggested Age`**          | String                    | Target age category (e.g. `6 and up`)                    | Categorical / Ordinal                               |
-| **`Price Per Toy`**          | String (e.g. `"$9.95 "`)  | Retail price per unit with dollar sign & spaces          | Strip `$`, trim spaces, convert to `float`          |
-| **`Units Sold`**             | Integer (1 to 5)          | Quantity purchased in this line item                     | Convert to `int`                                    |
-| **`Total Line Revenue`**     | String (e.g. `"$49.75 "`) | Total money received: `Price Per Toy * Units Sold`       | Strip `$`, trim spaces, convert to `float`          |
-| **`Total COGS`**             | String (e.g. `"$25.85 "`) | Cost of Goods Sold (wholesale cost to retailer)          | Strip `$`, trim spaces, convert to `float`          |
-| **`Payment`**                | String                    | Tender method (`Visa`, `Cash`, `Mastercard`, etc.)       | Categorical                                         |
-| **`Cashier ID`**             | String (e.g. `V.W.        | 880-4523`)                                               | Cashier initials joined with employee phone/station | Split into Cashier Code & Extension |
-| **`Member?`**                | String (`Yes` / `No`)     | Store loyalty program membership status                  | Convert to Boolean (`True`/`False`)                 |
-| **`Coupon?`**                | String (`Yes` / `No`)     | Whether a promotional coupon was applied                 | Convert to Boolean (`True`/`False`)                 |
-| **`Purchaser Age`**          | Integer (6 to 75)         | Age of the person paying at the checkout counter         | Numeric integer                                     |
-| **`Parking Validation?`**    | String (`Yes` / `No`)     | Whether store validated customer's parking ticket        | Convert to Boolean (`True`/`False`)                 |
+| Column Name                  | Raw Data Type                  | Real-World Description                                   | Data Preparation Needed                             |
+| :--------------------------- | :----------------------------- | :------------------------------------------------------- | :-------------------------------------------------- |
+| **`Invoice Number`**         | Integer / String               | Unique order transaction ID (multiple items share an ID) | Treat as categorical/identifier                     |
+| **`Date`**                   | String (`M/D/YYYY`)            | Transaction date (e.g. `1/7/2010`)                       | Convert to `datetime64[ns]`                         |
+| **`Time`**                   | String (`HH:MM`)               | 24-hour time of purchase (e.g. `14:19`)                  | Parse hour for time-of-day analysis                 |
+| **`Internal Toy ID Number`** | String                         | Warehouse SKU code (e.g. `D255/FE`)                      | Text categorical                                    |
+| **`Toy Item Number`**        | Integer / String               | Catalog product ID number (e.g. `192`)                   | Text identifier                                     |
+| **`Toy Company`**            | String                         | Brand manufacturer (`Duplo`, `Lego`)                     | Clean categorical                                   |
+| **`Toy Name`**               | String                         | Product name (e.g., `Policemen`, `Airplane`)             | Clean categorical                                   |
+| **`Suggested Age`**          | String                         | Target age category (e.g. `6 and up`)                    | Categorical / Ordinal                               |
+| **`Price Per Toy`**          | String (e.g. `"$9.95 "`)       | Retail price per unit with dollar sign & spaces          | Strip `$`, trim spaces, convert to `float`          |
+| **`Units Sold`**             | Integer (1 to 5)               | Quantity purchased in this line item                     | Convert to `int`                                    |
+| **`Total Line Revenue`**     | String (e.g. `"$49.75 "`)      | Total money received: `Price Per Toy * Units Sold`       | Strip `$`, trim spaces, convert to `float`          |
+| **`Total COGS`**             | String (e.g. `"$25.85 "`)      | Cost of Goods Sold (wholesale cost to retailer)          | Strip `$`, trim spaces, convert to `float`          |
+| **`Payment`**                | String                         | Tender method (`Visa`, `Cash`, `Mastercard`, etc.)       | Categorical                                         |
+| **`Cashier ID`**             | String (e.g. `V.W.\|880-4523`) | Cashier initials joined with employee phone/station      | Split into Cashier Code & Extension                 |
+| **`Member?`**                | String (`Yes` / `No`)          | Store loyalty program membership status                  | Convert to Boolean (`True`/`False`)                 |
+| **`Coupon?`**                | String (`Yes` / `No`)          | Whether a promotional coupon was applied                 | Convert to Boolean (`True`/`False`)                 |
+| **`Purchaser Age`**          | Integer (6 to 75)              | Age of the person paying at the checkout counter         | Numeric integer                                     |
+| **`Parking Validation?`**    | String (`Yes` / `No`)          | Whether store validated customer's parking ticket        | Convert to Boolean (`True`/`False`)                 |
 
 [↑ Back to Table of Contents](#toc-2-data-dictionary) | [Back to Section TOC](#toc-section-1-dataset-overview--data-dictionary)
 
