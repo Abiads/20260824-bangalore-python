@@ -26,8 +26,7 @@ print(validate_academic_email("bob@mit.edu.com"))          # Output: False (does
 import re
 
 def validate_academic_email(email: str) -> bool:
-    # TODO: Implement your solution here
-    pass
+    return bool(re.match(r"^[a-z0-9._]+@[a-z0-9.-]+\.(?:edu|res\.in)$", email))
 
 if __name__ == "__main__":
     print(validate_academic_email("arham.khan@cdac.res.in"))  # Expected: True

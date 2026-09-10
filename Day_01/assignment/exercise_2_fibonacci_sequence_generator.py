@@ -1,4 +1,4 @@
-"""
+r"""
 Exercise 2: Fibonacci Sequence Generator
 
 Write a Python script to print the first $N$ terms of the Fibonacci sequence, where $N$ is provided by the user.

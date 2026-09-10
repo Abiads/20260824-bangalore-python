@@ -1,4 +1,4 @@
-"""
+r"""
 Exercise 6: Sum of N Natural Numbers
 
 Write a script that accepts a positive integer $N$ from the user and calculates the sum of all natural numbers up to $N$.

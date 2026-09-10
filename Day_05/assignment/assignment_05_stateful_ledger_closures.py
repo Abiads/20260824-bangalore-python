@@ -1,4 +1,4 @@
-"""
+r"""
 ### Assignment 5: Stateful Ledger Scope Machine (LEGB Scopes & Closures)
 #### Scenario
 You are developing a stateful balance ledger tracker that tracks account state history. To satisfy strict architecture requirements, you must manage this state without defining any classes (`class` keyword is prohibited). Instead, you must use closures, nested functions, and Python scoping variables.
@@ -62,11 +62,39 @@ print(AUDIT_TRANSACTION_COUNT) # Output: 2
 AUDIT_TRANSACTION_COUNT = 0
 
 def create_bank_account(owner_name: str, initial_balance: float) -> dict:
-    # TODO: Implement your solution here
-    pass
+    balance = float(initial_balance)
+    history = [f"Account created with {balance}"]
+
+    def deposit(amount: float):
+        nonlocal balance, history
+        global AUDIT_TRANSACTION_COUNT
+        balance += amount
+        history.append(f"deposit {amount}")
+        AUDIT_TRANSACTION_COUNT += 1
+
+    def withdraw(amount: float):
+        nonlocal balance, history
+        global AUDIT_TRANSACTION_COUNT
+        if balance < amount:
+            raise ValueError("Insufficient balance")
+        balance -= amount
+        history.append(f"withdraw {amount}")
+        AUDIT_TRANSACTION_COUNT += 1
+
+    def get_statement() -> tuple:
+        return (owner_name, balance, list(history))
+
+    return {
+        "deposit": deposit,
+        "withdraw": withdraw,
+        "statement": get_statement
+    }
 
 if __name__ == "__main__":
     print("Initial Global Count:", AUDIT_TRANSACTION_COUNT)
     acc = create_bank_account("Arham", 1000.0)
-    # Test deposit, withdraw, and statement
+    acc["deposit"](200.0)
+    acc["withdraw"](150.0)
+    print("Owner, Balance, History:", acc["statement"]())
+    print("Audit Count:", AUDIT_TRANSACTION_COUNT)
 

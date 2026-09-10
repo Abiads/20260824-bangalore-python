@@ -36,8 +36,17 @@ directory = "Contact HR at 123-456-7890 or the helpdesk at (987) 654-3210. Direc
 import re
 
 def scrape_directory_phones(directory_text: str) -> list[dict]:
-    # TODO: Implement your solution here
-    pass
+    pattern = re.compile(r"(?:\((\d{3})\)\s*(\d{3})-(\d{4})|\b(\d{3})-(\d{3})-(\d{4})\b|\b(\d{3})(\d{3})(\d{4})\b)")
+    records = []
+    for m in pattern.finditer(directory_text):
+        area, prefix, line = [g for g in m.groups() if g is not None]
+        records.append({
+            "area_code": area,
+            "prefix": prefix,
+            "line_number": line,
+            "formatted": f"({area}) {prefix}-{line}"
+        })
+    return records
 
 if __name__ == "__main__":
     directory = "Contact HR at 123-456-7890 or the helpdesk at (987) 654-3210. Direct line is 5558881234."

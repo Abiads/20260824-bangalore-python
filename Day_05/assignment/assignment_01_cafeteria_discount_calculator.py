@@ -1,4 +1,4 @@
-"""
+r"""
 ### Assignment 1: CDAC Cafeteria Discount Calculator
 #### Scenario
 The CDAC Cafeteria needs a modular pricing function to calculate student bills. The cafeteria offers main combo meals, optional side-dishes, standard tax rates, promotional discounts, and delivery charges.
@@ -38,8 +38,8 @@ total2 = calculate_cafeteria_bill(100.0, 20.0, 30.0, tax_rate=0.08, discount=10.
 """
 
 def calculate_cafeteria_bill(base_price: float, *items: float, tax_rate: float = 0.05, discount: float = 0.0, delivery_fee: float = 0.0) -> float:
-    # TODO: Implement your solution here
-    pass
+    subtotal = (base_price + sum(items)) * (1 - discount / 100)
+    return round(subtotal + (subtotal * tax_rate) + delivery_fee, 2)
 
 if __name__ == "__main__":
     total1 = calculate_cafeteria_bill(100.0)

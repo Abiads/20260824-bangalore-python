@@ -39,8 +39,10 @@ data_input = [
 """
 
 def process_dataset(dataset: list[tuple]) -> list[dict]:
-    # TODO: Implement your solution here
-    pass
+    parsed = [(x[0], float(x[1].split(":")[1]), float(x[2].split(":")[1])) for x in dataset]
+    filtered = filter(lambda x: x[1] <= 1000.0, parsed)
+    mapped = map(lambda x: {"product": x[0], "price": x[1], "score": x[2]}, filtered)
+    return sorted(mapped, key=lambda x: x["score"], reverse=True)
 
 if __name__ == "__main__":
     data_input = [
