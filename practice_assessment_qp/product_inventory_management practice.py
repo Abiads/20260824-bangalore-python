@@ -1,8 +1,10 @@
+
+
 products = [
     {"id": 1, "name": "Laptop", "price": 55000, "quantity": 10},
     {"id": 2, "name": "Chair", "price": 1500, "quantity": 50},
     {"id": 3, "name": "Mouse", "price": 100, "quantity": 5},
-    {"id": 4, "name": "Headphone", "price": 1500, "quantity": 5}
+    {"id": 4, "name": "Headphone", "price": 1500, "quantity": 6}
 ]
 next_id = 5
 
@@ -35,18 +37,18 @@ def add_product():
 
 
 def search_product():
-    query = input("Enter product name to search: ").strip().lower()
-    matches = [p for p in products if query in p["name"].lower()]
+    query = input("Enter product name/id to search: ").strip().lower()
+    matches = [p for p in products if query in p["name"].lower() or query == str(p["id"])]
     if not matches:
         print("No products found.")
     for p in matches:
-        print(f"ID: {p['id']} | {p['name']} | Price: {p['price']} | Quantity: {p['quantity']}")
+        print(f"ID: {p['id']} | Name: {p['name']} | Price: {p['price']} | Quantity: {p['quantity']}")
 
 
 def update_product():
-    query = input("Enter product name to update: ").strip().lower()
+    query = input("Enter product id to update: ").strip().lower()
     for p in products:
-        if p["name"].lower() == query:
+        if str(p["id"]) == query or p["name"].lower() == query:
             p["price"] = get_num("Enter new price: ", float)
             p["quantity"] = get_num("Enter new quantity: ", int)
             print(f"Updated: {p['name']} | Price: {p['price']} | Quantity: {p['quantity']}")
@@ -79,11 +81,16 @@ def main():
         print("1. Add Product\n2. Search Product\n3. Update Product\n4. View All Products\n5. Delete Product\n6. Exit")
 
         ch = input("Enter choice (1-6): ").strip()
-        if ch == "1": add_product()
-        elif ch == "2": search_product()
-        elif ch == "3": update_product()
-        elif ch == "4": view_products()
-        elif ch == "5": delete_product()
+        if ch == "1":
+            add_product()
+        elif ch == "2":
+            search_product()
+        elif ch == "3":
+            update_product()
+        elif ch == "4":
+            view_products()
+        elif ch == "5":
+            delete_product()
         elif ch == "6":
             print("Exiting application. Goodbye!")
             break
